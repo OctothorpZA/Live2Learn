@@ -1,0 +1,65 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Dependencies
+# ----------------------------------------------------------------
+node_modules
+.pnpm-store
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Build & Cache
+# ----------------------------------------------------------------
+build
+dist
+.next
+out
+*.tsbuildinfo
+
+# Local Environment Variables (IMPORTANT!)
+# ----------------------------------------------------------------
+.env
+.env*.local
+test.env
+
+# Logs & Debugging
+# ----------------------------------------------------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS & Misc
+# ----------------------------------------------------------------
+.DS_Store
+*.pem
+certs/
+
+# IDE & Editor Config
+# ----------------------------------------------------------------
+.idea
+.vscode
+
+# Hosting Provider Specific
+# ----------------------------------------------------------------
+.vercel
+
+# Payload CMS Specific
+# ----------------------------------------------------------------
+# Ignore the default media upload directory to prevent assets from being committed
+public/media/
+
+# Generated SEO files (these should be generated on the server)
+public/robots.txt
+public/sitemap*.xml
+
+# Testing
+# ----------------------------------------------------------------
+coverage
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# TypeScript
+# ----------------------------------------------------------------
+next-env.d.ts
