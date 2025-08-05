@@ -2,7 +2,8 @@
 
 services:
   payload:
-    image: node:20-alpine
+    image: node:22-alpine
+    platform: linux/amd64 # Added for M1/M2 Mac compatibility
     ports:
       - '3000:3000'
     volumes:
@@ -14,10 +15,12 @@ services:
     # command: sh -c "yarn install && yarn dev"
     depends_on:
       #  - mongo
-      - postgres
+      postgres:
+        condition: service_healthy # This is the key change
     env_file:
       - .env
-      - .env.local
+      #- .env.local
+
 
   # Ensure your DATABASE_URI uses 'mongo' as the hostname ie. mongodb://mongo/my-db-name
   #mongo:
@@ -34,7 +37,10 @@ services:
   # Uncomment the following to use postgres
   postgres:
     restart: always
-    image: postgres:latest
+    # Corrected: Use the official PostGIS image instead of the standard postgres image
+    image: postgis/postgis:16-3.4
+    # image: postgres:latest
+    platform: linux/amd64 # Added for M1/M2 Mac compatibility
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -43,6 +49,11 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+    healthcheck: # This block ensures the DB is ready
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   # data:

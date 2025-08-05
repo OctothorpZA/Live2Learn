@@ -1,14 +1,16 @@
+'use client'
+
 import React from 'react'
 
 import { HeaderThemeProvider } from './HeaderTheme'
-import { ThemeProvider } from './Theme'
+import { ClientThemeProvider } from './Theme/ClientTheme' // Import the new client-side provider
 
 export const Providers: React.FC<{
   children: React.ReactNode
 }> = ({ children }) => {
   return (
-    <ThemeProvider>
+    <ClientThemeProvider>
       <HeaderThemeProvider>{children}</HeaderThemeProvider>
-    </ThemeProvider>
+    </ClientThemeProvider>
   )
 }

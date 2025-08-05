@@ -16,7 +16,7 @@ import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
-import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
+// import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
 import {
   MetaDescriptionField,
@@ -44,45 +44,33 @@ export const Posts: CollectionConfig<'posts'> = {
     categories: true,
     meta: {
       image: true,
-      description: true,
     },
+    authors: true,
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    livePreview: {
-      url: ({ data, req }) => {
-        const path = generatePreviewPath({
-          slug: typeof data?.slug === 'string' ? data.slug : '',
-          collection: 'posts',
-          req,
-        })
-
-        return path
-      },
-    },
-    preview: (data, { req }) =>
-      generatePreviewPath({
-        slug: typeof data?.slug === 'string' ? data.slug : '',
-        collection: 'posts',
-        req,
-      }),
     useAsTitle: 'title',
+    preview: generatePreviewPath,
+    group: 'Content',
   },
   fields: [
-    {
-      name: 'title',
-      type: 'text',
-      required: true,
-    },
     {
       type: 'tabs',
       tabs: [
         {
+          label: 'Content',
           fields: [
             {
-              name: 'heroImage',
+              name: 'title',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'coverImage',
+              label: 'Cover Image',
               type: 'upload',
               relationTo: 'media',
+              required: true,
             },
             {
               name: 'content',
@@ -91,49 +79,25 @@ export const Posts: CollectionConfig<'posts'> = {
                 features: ({ rootFeatures }) => {
                   return [
                     ...rootFeatures,
-                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock] }),
+                    HeadingFeature({
+                      enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'],
+                    }),
+                    BlocksFeature({
+                      blocks: [Banner, Code, MediaBlock],
+                    }),
+                    HorizontalRuleFeature(),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
-                    HorizontalRuleFeature(),
                   ]
                 },
               }),
-              label: false,
-              required: true,
-            },
-          ],
-          label: 'Content',
-        },
-        {
-          fields: [
-            {
-              name: 'relatedPosts',
-              type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              filterOptions: ({ id }) => {
-                return {
-                  id: {
-                    not_in: [id],
-                  },
-                }
-              },
-              hasMany: true,
-              relationTo: 'posts',
             },
             {
-              name: 'categories',
-              type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              hasMany: true,
-              relationTo: 'categories',
+              name: 'excerpt',
+              type: 'textarea',
+              label: 'Excerpt',
             },
           ],
-          label: 'Meta',
         },
         {
           name: 'meta',
@@ -147,16 +111,10 @@ export const Posts: CollectionConfig<'posts'> = {
             MetaTitleField({
               hasGenerateFn: true,
             }),
-            MetaImageField({
-              relationTo: 'media',
-            }),
-
             MetaDescriptionField({}),
+            MetaImageField({ relationTo: 'media' }),
             PreviewField({
-              // if the `generateUrl` function is configured
               hasGenerateFn: true,
-
-              // field paths to match the target field for data
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
@@ -220,14 +178,14 @@ export const Posts: CollectionConfig<'posts'> = {
     ...slugField(),
   ],
   hooks: {
-    afterChange: [revalidatePost],
+    // afterChange: [revalidatePost],
     afterRead: [populateAuthors],
-    afterDelete: [revalidateDelete],
+    // afterDelete: [revalidateDelete],
   },
   versions: {
     drafts: {
       autosave: {
-        interval: 100, // We set this interval for optimal live preview
+        interval: 100,
       },
       schedulePublish: true,
     },

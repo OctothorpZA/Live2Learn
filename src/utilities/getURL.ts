@@ -1,6 +1,12 @@
 import canUseDOM from './canUseDOM'
 
 export const getServerSideURL = () => {
+  // If we are on the server and an internal URL is set, use it.
+  // This is for Docker containers to communicate with each other.
+  if (typeof window === 'undefined' && process.env.PAYLOAD_INTERNAL_URL) {
+    return process.env.PAYLOAD_INTERNAL_URL
+  }
+
   let url = process.env.NEXT_PUBLIC_SERVER_URL
 
   if (!url && process.env.VERCEL_PROJECT_PRODUCTION_URL) {

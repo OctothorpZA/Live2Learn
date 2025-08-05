@@ -1,27 +1,40 @@
-import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
+// import { payloadCloudPlugin } from '@payloadcms/payload-cloud' // This was already correctly removed
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { Plugin } from 'payload'
-import { revalidateRedirects } from '@/hooks/revalidateRedirects'
+// import { revalidateRedirects } from '@/hooks/revalidateRedirects' // Temporarily disabled
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
 
-import { Page, Post } from '@/payload-types'
+import { Page, Post, Program, TeamMember, Product } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
-const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
+// Adjusted the type to include our new collections
+const generateTitle: GenerateTitle<Post | Page | Program | TeamMember | Product> = ({ doc }) => {
+  // Use 'programTitle' for Programs, 'name' for TeamMembers, and 'title' for others
+  const title = doc?.programTitle || doc?.name || doc?.title
+  return title ? `${title} | Living Through Learning` : 'Living Through Learning'
 }
 
-const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
+// Adjusted the type to include our new collections
+const generateURL: GenerateURL<Post | Page | Program | TeamMember | Product> = ({ doc }) => {
   const url = getServerSideURL()
-
-  return doc?.slug ? `${url}/${doc.slug}` : url
+  switch (doc.collection) {
+    case 'pages':
+      return doc.slug ? `${url}/${doc.slug}` : undefined
+    case 'posts':
+      return doc.slug ? `${url}/posts/${doc.slug}` : undefined
+    case 'programs':
+      return doc.slug ? `${url}/programs/${doc.slug}` : undefined
+    // Add cases for other collections if they have public-facing URLs
+    default:
+      return undefined
+  }
 }
 
 export const plugins: Plugin[] = [
@@ -35,16 +48,18 @@ export const plugins: Plugin[] = [
             return {
               ...field,
               admin: {
-                description: 'You will need to rebuild the website when changing this field.',
+                ...field.admin,
+                description:
+                  'Example: /old-path. The path to redirect from, without the domain name. Note: query strings are not supported in this field.',
               },
             }
           }
           return field
         })
       },
-      hooks: {
-        afterChange: [revalidateRedirects],
-      },
+      // hooks: {
+      //   afterChange: [revalidateRedirects], // Temporarily disabled
+      // },
     },
   }),
   nestedDocsPlugin({
@@ -52,6 +67,8 @@ export const plugins: Plugin[] = [
     generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc.slug}`, ''),
   }),
   seoPlugin({
+    // Added our new collections to the plugin's scope
+    collections: ['pages', 'posts', 'programs', 'team-members', 'products'],
     generateTitle,
     generateURL,
   }),
@@ -82,7 +99,7 @@ export const plugins: Plugin[] = [
     },
   }),
   searchPlugin({
-    collections: ['posts'],
+    collections: ['posts', 'pages', 'programs'],
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
       fields: ({ defaultFields }) => {
@@ -90,5 +107,5 @@ export const plugins: Plugin[] = [
       },
     },
   }),
-  payloadCloudPlugin(),
+  // payloadCloudPlugin(),
 ]
