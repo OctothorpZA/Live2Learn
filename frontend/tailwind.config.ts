@@ -1,4 +1,4 @@
-import type {Config} from 'tailwindcss'
+import type { Config } from 'tailwindcss'
 import typography from '@tailwindcss/typography'
 
 export default {
@@ -12,7 +12,13 @@ export default {
       boxShadow: {
         layer: '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
       },
+      // Add our custom LTL color palette
       colors: {
+        'ltl-deep-blue': '#0057B8',
+        'light-slate': '#F0F4F8',
+        'hopeful-yellow': '#FFC72C',
+        'charcoal': '#1D2939',
+        // Keeping the original template colors for flexibility
         black: '#0d0e12',
         white: '#fff',
         cyan: {
@@ -94,8 +100,10 @@ export default {
           950: '#14211a',
         },
       },
+      // Add our custom LTL font families
       fontFamily: {
-        sans: ['var(--font-inter)'],
+        heading: ['var(--font-poppins)', 'sans-serif'],
+        body: ['var(--font-noto-sans)', 'sans-serif'],
       },
     },
   },
