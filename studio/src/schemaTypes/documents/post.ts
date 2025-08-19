@@ -31,6 +31,18 @@ export const post = defineType({
       },
       validation: (rule) => rule.required(),
     }),
+    // START: Added Category Field
+    defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      options: {
+        list: ['Blog', 'News', 'Newsletter'],
+        layout: 'dropdown',
+      },
+      validation: (rule) => rule.required(),
+    }),
+    // END: Added Category Field
     defineField({
       name: 'content',
       title: 'Content',

@@ -6,7 +6,12 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
+// START: Import new schemas
 import {schemaTypes} from './src/schemaTypes'
+import {program} from './src/schemaTypes/documents/program'
+import {schoolPartner} from './src/schemaTypes/documents/schoolPartner'
+import {product} from './src/schemaTypes/documents/product'
+// END: Import new schemas
 import {structure} from './src/structure'
 import {unsplashImageAsset} from 'sanity-plugin-asset-source-unsplash'
 import {
@@ -130,6 +135,8 @@ export default defineConfig({
 
   // Schema configuration, imported from ./src/schemaTypes/index.ts
   schema: {
-    types: schemaTypes,
+    // START: Add new schemas to the types array
+    types: [...schemaTypes, program, schoolPartner, product],
+    // END: Add new schemas to the types array
   },
 })

@@ -24,6 +24,14 @@ export const person = defineType({
       type: 'string',
       validation: (rule) => rule.required(),
     }),
+    // START: Added Title Field
+    defineField({
+      name: 'title',
+      title: 'Title',
+      description: 'e.g., Executive Director, Facilitator, Board Member',
+      type: 'string',
+    }),
+    // END: Added Title Field
     defineField({
       name: 'picture',
       title: 'Picture',
