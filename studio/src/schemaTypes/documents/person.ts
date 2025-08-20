@@ -13,28 +13,33 @@ export const person = defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'firstName',
-      title: 'First Name',
+      name: 'name',
+      title: 'Full Name',
       type: 'string',
       validation: (rule) => rule.required(),
     }),
+    // **Crucial Fix**: Add the slug field, generated from the person's name
     defineField({
-      name: 'lastName',
-      title: 'Last Name',
-      type: 'string',
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'name',
+        maxLength: 96,
+      },
       validation: (rule) => rule.required(),
     }),
-    // START: Added Title Field
+    // **Crucial Fix**: Renamed 'title' to 'role' to match frontend components
     defineField({
-      name: 'title',
-      title: 'Title',
+      name: 'role',
+      title: 'Role',
       description: 'e.g., Executive Director, Facilitator, Board Member',
       type: 'string',
     }),
-    // END: Added Title Field
+    // **Crucial Fix**: Renamed 'picture' to 'image' to match frontend components
     defineField({
-      name: 'picture',
-      title: 'Picture',
+      name: 'image',
+      title: 'Image',
       type: 'image',
       fields: [
         defineField({
@@ -42,38 +47,25 @@ export const person = defineType({
           type: 'string',
           title: 'Alternative text',
           description: 'Important for SEO and accessibility.',
-          validation: (rule) => {
-            // Custom validation to ensure alt text is provided if the image is present. https://www.sanity.io/docs/validation
-            return rule.custom((alt, context) => {
-              if ((context.document?.picture as any)?.asset?._ref && !alt) {
-                return 'Required'
-              }
-              return true
-            })
-          },
         }),
       ],
       options: {
         hotspot: true,
-        aiAssist: {
-          imageDescriptionField: 'alt',
-        },
       },
       validation: (rule) => rule.required(),
     }),
   ],
-  // List preview configuration. https://www.sanity.io/docs/previews-list-views
   preview: {
     select: {
-      firstName: 'firstName',
-      lastName: 'lastName',
-      picture: 'picture',
+      title: 'name',
+      subtitle: 'role',
+      media: 'image',
     },
-    prepare(selection) {
+    prepare({title, subtitle, media}) {
       return {
-        title: `${selection.firstName} ${selection.lastName}`,
-        subtitle: 'Person',
-        media: selection.picture,
+        title: title,
+        subtitle: subtitle,
+        media: media || UserIcon,
       }
     },
   },

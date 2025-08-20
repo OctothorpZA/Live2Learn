@@ -1,5 +1,5 @@
 import './globals.css'
-
+import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 // Import Poppins and Noto Sans from next/font/google
@@ -94,6 +94,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           
           <Footer />
         </section>
+        {/* The <Analytics> component is responsible for rendering the Vercel Analytics widget */}
+        <Analytics />
+        {/* The <SpeedInsights> component is responsible for rendering the Vercel Speed Insights widget */}
         <SpeedInsights />
       </body>
     </html>

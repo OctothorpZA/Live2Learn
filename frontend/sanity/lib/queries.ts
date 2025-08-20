@@ -136,14 +136,22 @@ export const programSlugsQuery = groq`
 *[_type == "program" && defined(slug.current)][].slug.current
 `
 
-// New query to get a list of all programs for the "Our Work" index page
+// Query to get a list of all programs for the "Our Work" index page
 export const allProgramsQuery = groq`
   *[_type == "program" && defined(slug.current)] | order(_createdAt desc) {
     _id,
     programName,
     "slug": slug.current,
     "coverImage": coverImage.asset->url,
-    // Get a short text excerpt from the first block of the description
     "excerpt": array::join(string::split((pt::text(description[0...1])), "")[0...150], "") + "..."
+  }
+`
+// New query to fetch all team members for the TeamGrid component
+export const allTeamMembersQuery = groq`
+  *[_type == "person"] | order(name asc) {
+    _id,
+    name,
+    role,
+    "image": image.asset->url
   }
 `

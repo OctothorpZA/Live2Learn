@@ -866,6 +866,17 @@ export type ProgramPageQueryResult = null
 // Variable: programSlugsQuery
 // Query: *[_type == "program" && defined(slug.current)][].slug.current
 export type ProgramSlugsQueryResult = Array<never>
+// Variable: allProgramsQuery
+// Query: *[_type == "program" && defined(slug.current)] | order(_createdAt desc) {    _id,    programName,    "slug": slug.current,    "coverImage": coverImage.asset->url,    "excerpt": array::join(string::split((pt::text(description[0...1])), "")[0...150], "") + "..."  }
+export type AllProgramsQueryResult = Array<never>
+// Variable: allTeamMembersQuery
+// Query: *[_type == "person"] | order(name asc) {    _id,    name,    role,    "image": image.asset->url  }
+export type AllTeamMembersQueryResult = Array<{
+  _id: string
+  name: null
+  role: null
+  image: null
+}>
 
 // Query TypeMap
 import '@sanity/client'
@@ -882,5 +893,7 @@ declare module '@sanity/client' {
     '\n  *[_type == "page" && slug.current == \'home\'][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    pageBuilder[]{\n      ...,\n      _key,\n      _type,\n      _type == \'hero\' => { ..., "backgroundImage": backgroundImage.asset->url, primaryCta { \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n }, secondaryCta { \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n } },\n      _type == \'solution\' => { ..., solutions[]{..., "icon": icon.asset->url} },\n      _type == \'story\' => { ..., person->{name, role, "image": image.asset->url} }\n    }\n  }\n': HomePageQueryResult
     '\n  *[_type == "program" && slug.current == $slug][0] {\n    _id,\n    programName,\n    "slug": slug.current,\n    "coverImage": coverImage.asset->url,\n    description,\n    status,\n    targetAudience,\n    keyMetrics[]{\n      _key,\n      value,\n      label\n    },\n  }\n': ProgramPageQueryResult
     '\n*[_type == "program" && defined(slug.current)][].slug.current\n': ProgramSlugsQueryResult
+    '\n  *[_type == "program" && defined(slug.current)] | order(_createdAt desc) {\n    _id,\n    programName,\n    "slug": slug.current,\n    "coverImage": coverImage.asset->url,\n    "excerpt": array::join(string::split((pt::text(description[0...1])), "")[0...150], "") + "..."\n  }\n': AllProgramsQueryResult
+    '\n  *[_type == "person"] | order(name asc) {\n    _id,\n    name,\n    role,\n    "image": image.asset->url\n  }\n': AllTeamMembersQueryResult
   }
 }

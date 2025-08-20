@@ -7,14 +7,16 @@ import { settings } from './singletons/settings'
 import { link } from './objects/link'
 import { blockContent } from './objects/blockContent'
 
-// Import the new section schemas
+// Import the existing section schemas
 import { hero } from './objects/hero'
 import { challenge } from './objects/challenge'
-import { solution, solutionItem } from './objects/solution' // Import solutionItem
-import { impact, metricItem } from './objects/impact' // Import metricItem
+import { solution, solutionItem } from './objects/solution'
+import { impact, metricItem } from './objects/impact'
 import { story } from './objects/story'
+// Import our new teamGrid schema
+import { teamGrid } from './objects/teamGrid'
 
-// Export an array of all the schema types. This is used in the Sanity Studio configuration.
+// Export an array of all the schema types.
 export const schemaTypes = [
   // Singletons
   settings,
@@ -27,12 +29,13 @@ export const schemaTypes = [
   infoSection,
   callToAction,
   link,
-  // Add the new page builder sections here
+  // Page builder sections
   hero,
   challenge,
   solution,
-  solutionItem, // Register solutionItem
+  solutionItem,
   impact,
-  metricItem, // Register metricItem
+  metricItem,
   story,
+  teamGrid, // Register the new teamGrid schema
 ]

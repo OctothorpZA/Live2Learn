@@ -48,6 +48,7 @@ export const page = defineType({
         { type: 'solution' },
         { type: 'impact' },
         { type: 'story' },
+        { type: 'teamGrid' }, // Add our new teamGrid type here
         { type: 'callToAction' },
         { type: 'infoSection' },
       ],
