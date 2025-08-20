@@ -806,7 +806,7 @@ export type PagesSlugsResult = Array<{
   slug: string
 }>
 // Variable: homePageQuery
-// Query: *[_type == "page" && slug.current == 'home'][0] {    _id,    title,    "slug": slug.current,    pageBuilder[]{      ..., // Include all top-level fields for each section      _key,      _type,      // Handle the 'hero' section type      _type == 'hero' => {        ...,        "backgroundImage": backgroundImage.asset->url,        primaryCta {            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      }        },        secondaryCta {            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      }        }      },      // Handle the 'solution' section type      _type == 'solution' => {        ...,        solutions[]{          ...,          "icon": icon.asset->url        }      },      // Handle the 'story' section type      _type == 'story' => {        ...,        person->{          name,          role,          "image": image.asset->url        }      }    }  }
+// Query: *[_type == "page" && slug.current == 'home'][0] {    _id,    title,    "slug": slug.current,    pageBuilder[]{      ...,      _key,      _type,      _type == 'hero' => { ..., "backgroundImage": backgroundImage.asset->url, primaryCta {   link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      } }, secondaryCta {   link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      } } },      _type == 'solution' => { ..., solutions[]{..., "icon": icon.asset->url} },      _type == 'story' => { ..., person->{name, role, "image": image.asset->url} }    }  }
 export type HomePageQueryResult = {
   _id: string
   title: null
@@ -860,6 +860,12 @@ export type HomePageQueryResult = {
       }
   > | null
 } | null
+// Variable: programPageQuery
+// Query: *[_type == "program" && slug.current == $slug][0] {    _id,    programName,    "slug": slug.current,    "coverImage": coverImage.asset->url,    description,    status,    targetAudience,    keyMetrics[]{      _key,      value,      label    },  }
+export type ProgramPageQueryResult = null
+// Variable: programSlugsQuery
+// Query: *[_type == "program" && defined(slug.current)][].slug.current
+export type ProgramSlugsQueryResult = Array<never>
 
 // Query TypeMap
 import '@sanity/client'
@@ -873,6 +879,8 @@ declare module '@sanity/client' {
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
-    '\n  *[_type == "page" && slug.current == \'home\'][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    pageBuilder[]{\n      ..., // Include all top-level fields for each section\n      _key,\n      _type,\n      // Handle the \'hero\' section type\n      _type == \'hero\' => {\n        ...,\n        "backgroundImage": backgroundImage.asset->url,\n        primaryCta {\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        },\n        secondaryCta {\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      // Handle the \'solution\' section type\n      _type == \'solution\' => {\n        ...,\n        solutions[]{\n          ...,\n          "icon": icon.asset->url\n        }\n      },\n      // Handle the \'story\' section type\n      _type == \'story\' => {\n        ...,\n        person->{\n          name,\n          role,\n          "image": image.asset->url\n        }\n      }\n    }\n  }\n': HomePageQueryResult
+    '\n  *[_type == "page" && slug.current == \'home\'][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    pageBuilder[]{\n      ...,\n      _key,\n      _type,\n      _type == \'hero\' => { ..., "backgroundImage": backgroundImage.asset->url, primaryCta { \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n }, secondaryCta { \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n } },\n      _type == \'solution\' => { ..., solutions[]{..., "icon": icon.asset->url} },\n      _type == \'story\' => { ..., person->{name, role, "image": image.asset->url} }\n    }\n  }\n': HomePageQueryResult
+    '\n  *[_type == "program" && slug.current == $slug][0] {\n    _id,\n    programName,\n    "slug": slug.current,\n    "coverImage": coverImage.asset->url,\n    description,\n    status,\n    targetAudience,\n    keyMetrics[]{\n      _key,\n      value,\n      label\n    },\n  }\n': ProgramPageQueryResult
+    '\n*[_type == "program" && defined(slug.current)][].slug.current\n': ProgramSlugsQueryResult
   }
 }

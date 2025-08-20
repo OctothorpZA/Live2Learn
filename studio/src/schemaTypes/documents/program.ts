@@ -17,6 +17,26 @@ export const program = defineType({
       type: 'string',
       validation: (rule) => rule.required(),
     }),
+    // **Crucial Fix**: Add the slug field
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'programName',
+        maxLength: 96,
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'coverImage',
+      title: 'Cover Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      validation: (rule) => rule.required(),
+    }),
     defineField({
       name: 'description',
       title: 'Description',
@@ -40,17 +60,32 @@ export const program = defineType({
       },
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: 'keyMetrics',
+      title: 'Key Metrics',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {name: 'value', type: 'string', title: 'Value (e.g., 50+)'},
+            {name: 'label', type: 'string', title: 'Label (e.g., Schools Reached)'},
+          ],
+        },
+      ],
+    }),
   ],
   preview: {
     select: {
       title: 'programName',
       subtitle: 'status',
+      media: 'coverImage',
     },
-    prepare({title, subtitle}) {
+    prepare({title, subtitle, media}) {
       return {
         title,
         subtitle: `Status: ${subtitle}`,
-        media: BookIcon,
+        media: media || BookIcon,
       }
     },
   },

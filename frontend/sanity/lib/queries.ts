@@ -96,44 +96,42 @@ export const pagesSlugs = defineQuery(`
   {"slug": slug.current}
 `)
 
-// UPDATED query for the Homepage to be more robust for live preview
+// Query for the Homepage
 export const homePageQuery = groq`
   *[_type == "page" && slug.current == 'home'][0] {
     _id,
     title,
     "slug": slug.current,
     pageBuilder[]{
-      ..., // Include all top-level fields for each section
+      ...,
       _key,
       _type,
-      // Handle the 'hero' section type
-      _type == 'hero' => {
-        ...,
-        "backgroundImage": backgroundImage.asset->url,
-        primaryCta {
-          ${linkFields}
-        },
-        secondaryCta {
-          ${linkFields}
-        }
-      },
-      // Handle the 'solution' section type
-      _type == 'solution' => {
-        ...,
-        solutions[]{
-          ...,
-          "icon": icon.asset->url
-        }
-      },
-      // Handle the 'story' section type
-      _type == 'story' => {
-        ...,
-        person->{
-          name,
-          role,
-          "image": image.asset->url
-        }
-      }
+      _type == 'hero' => { ..., "backgroundImage": backgroundImage.asset->url, primaryCta { ${linkFields} }, secondaryCta { ${linkFields} } },
+      _type == 'solution' => { ..., solutions[]{..., "icon": icon.asset->url} },
+      _type == 'story' => { ..., person->{name, role, "image": image.asset->url} }
     }
   }
+`
+
+// Query for a single Program Page
+export const programPageQuery = groq`
+  *[_type == "program" && slug.current == $slug][0] {
+    _id,
+    programName,
+    "slug": slug.current,
+    "coverImage": coverImage.asset->url,
+    description,
+    status,
+    targetAudience,
+    keyMetrics[]{
+      _key,
+      value,
+      label
+    },
+  }
+`
+
+// New query to get all program slugs for generateStaticParams
+export const programSlugsQuery = groq`
+*[_type == "program" && defined(slug.current)][].slug.current
 `
