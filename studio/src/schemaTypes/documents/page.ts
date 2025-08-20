@@ -1,11 +1,9 @@
-import {defineField, defineType} from 'sanity'
-import {DocumentIcon} from '@sanity/icons'
+import { defineField, defineType } from 'sanity'
+import { DocumentIcon } from '@sanity/icons'
 
 /**
- * Page schema.  Define and edit the fields for the 'page' content type.
- * Learn more: https://www.sanity.io/docs/schema-types
+ * Page schema. Define and edit the fields for the 'page' content type.
  */
-
 export const page = defineType({
   name: 'page',
   title: 'Page',
@@ -18,7 +16,6 @@ export const page = defineType({
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
-
     defineField({
       name: 'slug',
       title: 'Slug',
@@ -44,10 +41,18 @@ export const page = defineType({
       name: 'pageBuilder',
       title: 'Page builder',
       type: 'array',
-      of: [{type: 'callToAction'}, {type: 'infoSection'}],
+      // Add the new section types to this array
+      of: [
+        { type: 'hero' },
+        { type: 'challenge' },
+        { type: 'solution' },
+        { type: 'impact' },
+        { type: 'story' },
+        { type: 'callToAction' },
+        { type: 'infoSection' },
+      ],
       options: {
         insertMenu: {
-          // Configure the "Add Item" menu to display a thumbnail preview of the content type. https://www.sanity.io/docs/array-type#efb1fe03459d
           views: [
             {
               name: 'grid',

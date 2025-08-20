@@ -1,4 +1,4 @@
-import {defineQuery} from 'next-sanity'
+import { defineQuery, groq } from 'next-sanity'
 
 export const settingsQuery = defineQuery(`*[_type == "settings"][0]`)
 
@@ -95,3 +95,45 @@ export const pagesSlugs = defineQuery(`
   *[_type == "page" && defined(slug.current)]
   {"slug": slug.current}
 `)
+
+// UPDATED query for the Homepage to be more robust for live preview
+export const homePageQuery = groq`
+  *[_type == "page" && slug.current == 'home'][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    pageBuilder[]{
+      ..., // Include all top-level fields for each section
+      _key,
+      _type,
+      // Handle the 'hero' section type
+      _type == 'hero' => {
+        ...,
+        "backgroundImage": backgroundImage.asset->url,
+        primaryCta {
+          ${linkFields}
+        },
+        secondaryCta {
+          ${linkFields}
+        }
+      },
+      // Handle the 'solution' section type
+      _type == 'solution' => {
+        ...,
+        solutions[]{
+          ...,
+          "icon": icon.asset->url
+        }
+      },
+      // Handle the 'story' section type
+      _type == 'story' => {
+        ...,
+        person->{
+          name,
+          role,
+          "image": image.asset->url
+        }
+      }
+    }
+  }
+`

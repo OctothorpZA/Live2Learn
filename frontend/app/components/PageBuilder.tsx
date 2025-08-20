@@ -1,112 +1,72 @@
 'use client'
 
-import {SanityDocument} from 'next-sanity'
-import {useOptimistic} from 'next-sanity/hooks'
-import Link from 'next/link'
+// Import the auto-generated types for our page queries
+import { GetPageQueryResult, HomePageQueryResult } from '@/sanity.types'
 
-import BlockRenderer from '@/app/components/BlockRenderer'
-import {GetPageQueryResult} from '@/sanity.types'
-import {dataAttr} from '@/sanity/lib/utils'
-import {studioUrl} from '@/sanity/lib/api'
+// Import all the custom and generic section components
+import HeroSection from '@/app/components/sections/HeroSection'
+import ChallengeSection from '@/app/components/sections/ChallengeSection'
+import SolutionSection from '@/app/components/sections/SolutionSection'
+import ImpactSection from '@/app/components/sections/ImpactSection'
+import StoriesSection from '@/app/components/sections/StoriesSection'
+import Cta from '@/app/components/Cta'
+import InfoSection from '@/app/components/InfoSection'
 
-type PageBuilderPageProps = {
-  page: GetPageQueryResult
+// This is the mapping from Sanity schema types to our React components
+const components: { [key: string]: React.ComponentType<any> } = {
+  hero: HeroSection,
+  challenge: ChallengeSection,
+  solution: SolutionSection,
+  impact: ImpactSection,
+  story: StoriesSection,
+  callToAction: Cta,
+  infoSection: InfoSection,
 }
 
-type PageBuilderSection = {
+// **Crucial Fix**: Define a simple, explicit type for any section.
+// This tells TypeScript that every section will have at least a _key and a _type.
+type AnySection = {
   _key: string
   _type: string
+  [key: string]: any // Allow any other properties
 }
 
-type PageData = {
-  _id: string
-  _type: string
-  pageBuilder?: PageBuilderSection[]
-}
+// Create a universal type for the page prop
+type UniversalPageData = HomePageQueryResult | GetPageQueryResult
 
-/**
- * The PageBuilder component is used to render the blocks from the `pageBuilder` field in the Page type in your Sanity Studio.
- */
+export default function PageBuilder({ page }: { page: UniversalPageData }) {
+  // Safely access the pageBuilder array and cast it to our new universal section type
+  const sections = (page?.pageBuilder as AnySection[]) || []
 
-function renderSections(pageBuilderSections: PageBuilderSection[], page: GetPageQueryResult) {
-  if (!page) {
-    return null
-  }
-  return (
-    <div
-      data-sanity={dataAttr({
-        id: page._id,
-        type: page._type,
-        path: `pageBuilder`,
-      }).toString()}
-    >
-      {pageBuilderSections.map((block: any, index: number) => (
-        <BlockRenderer
-          key={block._key}
-          index={index}
-          block={block}
-          pageId={page._id}
-          pageType={page._type}
-        />
-      ))}
-    </div>
-  )
-}
-
-function renderEmptyState(page: GetPageQueryResult) {
-  if (!page) {
-    return null
-  }
-  return (
-    <div className="container">
-      <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">
-        This page has no content!
-      </h1>
-      <p className="mt-2 text-base text-gray-500">Open the page in Sanity Studio to add content.</p>
-      <div className="mt-10 flex">
-        <Link
-          className="rounded-full flex gap-2 mr-6 items-center bg-black hover:bg-brand focus:bg-blue py-3 px-6 text-white transition-colors duration-200"
-          href={`${studioUrl}/structure/intent/edit/template=page;type=page;path=pageBuilder;id=${page._id}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Add content to this page
-        </Link>
+  if (sections.length === 0) {
+    // Render a fallback message if there are no sections.
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <h1 className="text-3xl font-bold">This page has no content yet.</h1>
+        <p className="mt-4">
+          Please add sections to this page in the Sanity Studio.
+        </p>
       </div>
-    </div>
-  )
-}
-
-export default function PageBuilder({page}: PageBuilderPageProps) {
-  const pageBuilderSections = useOptimistic<
-    PageBuilderSection[] | undefined,
-    SanityDocument<PageData>
-  >(page?.pageBuilder || [], (currentSections, action) => {
-    // The action contains updated document data from Sanity
-    // when someone makes an edit in the Studio
-
-    // If the edit was to a different document, ignore it
-    if (action.id !== page?._id) {
-      return currentSections
-    }
-
-    // If there are sections in the updated document, use them
-    if (action.document.pageBuilder) {
-      // Reconcile References. https://www.sanity.io/docs/enabling-drag-and-drop#ffe728eea8c1
-      return action.document.pageBuilder.map(
-        (section) => currentSections?.find((s) => s._key === section?._key) || section,
-      )
-    }
-
-    // Otherwise keep the current sections
-    return currentSections
-  })
-
-  if (!page) {
-    return renderEmptyState(page)
+    )
   }
 
-  return pageBuilderSections && pageBuilderSections.length > 0
-    ? renderSections(pageBuilderSections, page)
-    : renderEmptyState(page)
+  return (
+    <>
+      {sections.map((section) => {
+        const Component = components[section._type]
+
+        if (!Component) {
+          console.warn('Unknown section type:', section._type)
+          return null
+        }
+
+        // The generic components from the template expect a prop named 'block'
+        if (section._type === 'callToAction' || section._type === 'infoSection') {
+          return <Component key={section._key} block={section} />
+        }
+
+        return <Component key={section._key} {...section} />
+      })}
+    </>
+  )
 }

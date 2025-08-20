@@ -39,7 +39,7 @@ export default function Footer() {
           <div className="md:col-span-2">
             <h3 className="text-xl font-bold font-heading text-ltl-deep-blue mb-2">LTL Logo</h3>
             <p className="text-base max-w-md">
-              Living Through Learning is dedicated to unlocking a child's future, one word at a time.
+              Living Through Learning is dedicated to unlocking a child&apos;s future, one word at a time.
             </p>
             <div className="mt-4 flex space-x-4">
               <SocialIcon platform="FB" />

@@ -805,6 +805,61 @@ export type PostPagesSlugsResult = Array<{
 export type PagesSlugsResult = Array<{
   slug: string
 }>
+// Variable: homePageQuery
+// Query: *[_type == "page" && slug.current == 'home'][0] {    _id,    title,    "slug": slug.current,    pageBuilder[]{      ..., // Include all top-level fields for each section      _key,      _type,      // Handle the 'hero' section type      _type == 'hero' => {        ...,        "backgroundImage": backgroundImage.asset->url,        primaryCta {            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      }        },        secondaryCta {            link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      }        }      },      // Handle the 'solution' section type      _type == 'solution' => {        ...,        solutions[]{          ...,          "icon": icon.asset->url        }      },      // Handle the 'story' section type      _type == 'story' => {        ...,        person->{          name,          role,          "image": image.asset->url        }      }    }  }
+export type HomePageQueryResult = {
+  _id: string
+  title: null
+  slug: string
+  pageBuilder: Array<
+    | {
+        _key: string
+        _type: 'callToAction'
+        heading: string
+        text?: string
+        buttonText?: string
+        link?: Link
+      }
+    | {
+        _key: string
+        _type: 'infoSection'
+        heading?: string
+        subheading?: string
+        content?: Array<{
+          children?: Array<{
+            marks?: Array<string>
+            text?: string
+            _type: 'span'
+            _key: string
+          }>
+          style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+          listItem?: 'bullet' | 'number'
+          markDefs?: Array<{
+            linkType?: 'href' | 'page' | 'post'
+            href?: string
+            page?: {
+              _ref: string
+              _type: 'reference'
+              _weak?: boolean
+              [internalGroqTypeReferenceTo]?: 'page'
+            }
+            post?: {
+              _ref: string
+              _type: 'reference'
+              _weak?: boolean
+              [internalGroqTypeReferenceTo]?: 'post'
+            }
+            openInNewTab?: boolean
+            _type: 'link'
+            _key: string
+          }>
+          level?: number
+          _type: 'block'
+          _key: string
+        }>
+      }
+  > | null
+} | null
 
 // Query TypeMap
 import '@sanity/client'
@@ -818,5 +873,6 @@ declare module '@sanity/client' {
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
+    '\n  *[_type == "page" && slug.current == \'home\'][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    pageBuilder[]{\n      ..., // Include all top-level fields for each section\n      _key,\n      _type,\n      // Handle the \'hero\' section type\n      _type == \'hero\' => {\n        ...,\n        "backgroundImage": backgroundImage.asset->url,\n        primaryCta {\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        },\n        secondaryCta {\n          \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n\n        }\n      },\n      // Handle the \'solution\' section type\n      _type == \'solution\' => {\n        ...,\n        solutions[]{\n          ...,\n          "icon": icon.asset->url\n        }\n      },\n      // Handle the \'story\' section type\n      _type == \'story\' => {\n        ...,\n        person->{\n          name,\n          role,\n          "image": image.asset->url\n        }\n      }\n    }\n  }\n': HomePageQueryResult
   }
 }
