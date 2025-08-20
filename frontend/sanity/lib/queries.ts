@@ -1,3 +1,5 @@
+// frontend/sanity/lib/queries.ts
+
 import { defineQuery, groq } from 'next-sanity'
 
 export const settingsQuery = defineQuery(`*[_type == "settings"][0]`)
@@ -70,8 +72,9 @@ export const sitemapData = defineQuery(`
   }
 `)
 
+// MODIFIED FOR SPRINT 11: Restoring the correct, robust category filter.
 export const allPostsQuery = defineQuery(`
-  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {
+  *[_type == "post" && defined(slug.current) && category._ref in *[_type=="category" && title in ["News", "Blog", "Newsletter"]]._id] | order(date desc, _updatedAt desc) {
     ${postFields}
   }
 `)
@@ -82,7 +85,8 @@ export const morePostsQuery = defineQuery(`
   }
 `)
 
-export const postQuery = defineQuery(`
+// MODIFIED FOR SPRINT 11: Fetches a single post for the detail page. Renamed from postQuery.
+export const singlePostQuery = defineQuery(`
   *[_type == "post" && slug.current == $slug] [0] {
     content[]{
     ...,
