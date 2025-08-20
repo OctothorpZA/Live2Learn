@@ -8,9 +8,9 @@ export default function Header() {
   // State to manage the mobile menu's visibility
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  // Hardcoded navigation links as per the sprint requirements
+  // **Crucial Fix**: Updated the 'Our Work' link to point to the correct '/programs' route.
   const navLinks = [
-    { href: '/work', label: 'Our Work' },
+    { href: '/programs', label: 'Our Work' },
     { href: '/about', label: 'About Us' },
     { href: '/get-involved', label: 'Get Involved' },
     { href: '/news', label: 'News & Stories' },
