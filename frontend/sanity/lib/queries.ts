@@ -49,6 +49,15 @@ export const getPageQuery = defineQuery(`
           }
         }
       },
+      _type == "teamGrid" => {
+        "teamMembers": @.teamMembers[]->{
+          _id,
+          name,
+          role,
+          "image": image.asset->url,
+          bio
+        }
+      }
     },
   }
 `)
@@ -153,5 +162,37 @@ export const allTeamMembersQuery = groq`
     name,
     role,
     "image": image.asset->url
+  }
+`
+
+// ==================================================================
+// E-Shop Queries for Sprint 10
+// ==================================================================
+
+/**
+ * Fetches a list of all products for the gallery page.
+ * Includes the productName, slug, image, and price.
+ */
+export const allProductsQuery = groq`
+  *[_type == "product"] {
+    _id,
+    productName,
+    "slug": slug.current,
+    "image": image.asset->url,
+    price,
+  }
+`
+
+/**
+ * Fetches all details for a single product based on its slug.
+ */
+export const singleProductQuery = groq`
+  *[_type == "product" && slug.current == $slug][0] {
+    _id,
+    productName,
+    "slug": slug.current,
+    "image": image.asset->url,
+    price,
+    description,
   }
 `

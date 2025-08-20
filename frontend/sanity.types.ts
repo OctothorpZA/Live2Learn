@@ -585,7 +585,7 @@ export type SettingsQueryResult = {
   }
 } | null
 // Variable: getPageQuery
-// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    heading,    subheading,    "pageBuilder": pageBuilder[]{      ...,      _type == "callToAction" => {          link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      },      },      _type == "infoSection" => {        content[]{          ...,          markDefs[]{            ...,              _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }          }        }      },    },  }
+// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    heading,    subheading,    "pageBuilder": pageBuilder[]{      ...,      _type == "callToAction" => {          link {      ...,        _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      },      },      _type == "infoSection" => {        content[]{          ...,          markDefs[]{            ...,              _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }          }        }      },      _type == "teamGrid" => {        "teamMembers": @.teamMembers[]->{          _id,          name,          role,          "image": image.asset->url,          bio        }      }    },  }
 export type GetPageQueryResult = {
   _id: string
   _type: 'page'
@@ -877,13 +877,19 @@ export type AllTeamMembersQueryResult = Array<{
   role: null
   image: null
 }>
+// Variable: allProductsQuery
+// Query: *[_type == "product"] {    _id,    productName,    "slug": slug.current,    "image": image.asset->url,    price,  }
+export type AllProductsQueryResult = Array<never>
+// Variable: singleProductQuery
+// Query: *[_type == "product" && slug.current == $slug][0] {    _id,    productName,    "slug": slug.current,    "image": image.asset->url,    price,    description,  }
+export type SingleProductQueryResult = null
 
 // Query TypeMap
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
     '*[_type == "settings"][0]': SettingsQueryResult
-    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n,\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n    },\n  }\n': GetPageQueryResult
+    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      _type == "callToAction" => {\n        \n  link {\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n,\n      },\n      _type == "infoSection" => {\n        content[]{\n          ...,\n          markDefs[]{\n            ...,\n            \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n          }\n        }\n      },\n      _type == "teamGrid" => {\n        "teamMembers": @.teamMembers[]->{\n          _id,\n          name,\n          role,\n          "image": image.asset->url,\n          bio\n        }\n      }\n    },\n  }\n': GetPageQueryResult
     '\n  *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult
     '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': AllPostsQueryResult
     '\n  *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': MorePostsQueryResult
@@ -895,5 +901,7 @@ declare module '@sanity/client' {
     '\n*[_type == "program" && defined(slug.current)][].slug.current\n': ProgramSlugsQueryResult
     '\n  *[_type == "program" && defined(slug.current)] | order(_createdAt desc) {\n    _id,\n    programName,\n    "slug": slug.current,\n    "coverImage": coverImage.asset->url,\n    "excerpt": array::join(string::split((pt::text(description[0...1])), "")[0...150], "") + "..."\n  }\n': AllProgramsQueryResult
     '\n  *[_type == "person"] | order(name asc) {\n    _id,\n    name,\n    role,\n    "image": image.asset->url\n  }\n': AllTeamMembersQueryResult
+    '\n  *[_type == "product"] {\n    _id,\n    productName,\n    "slug": slug.current,\n    "image": image.asset->url,\n    price,\n  }\n': AllProductsQueryResult
+    '\n  *[_type == "product" && slug.current == $slug][0] {\n    _id,\n    productName,\n    "slug": slug.current,\n    "image": image.asset->url,\n    price,\n    description,\n  }\n': SingleProductQueryResult
   }
 }

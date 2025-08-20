@@ -1,4 +1,4 @@
-import {PackageIcon} from '@sanity/icons' // Corrected: Replaced ShoppingCartIcon with PackageIcon
+import {PackageIcon} from '@sanity/icons'
 import {defineField, defineType} from 'sanity'
 
 /**
@@ -8,13 +8,24 @@ import {defineField, defineType} from 'sanity'
 export const product = defineType({
   name: 'product',
   title: 'Product',
-  icon: PackageIcon, // Corrected: Replaced ShoppingCartIcon with PackageIcon
+  icon: PackageIcon,
   type: 'document',
   fields: [
     defineField({
       name: 'productName',
       title: 'Product Name',
       type: 'string',
+      validation: (rule) => rule.required(),
+    }),
+    // This is the new slug field, required for creating unique URLs
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'productName', // Automatically generates from the product name
+        maxLength: 96,
+      },
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -73,7 +84,7 @@ export const product = defineType({
       return {
         title,
         subtitle: `Type: ${subtitle}`,
-        media: media || PackageIcon, // Corrected: Replaced ShoppingCartIcon with PackageIcon
+        media: media || PackageIcon,
       }
     },
   },

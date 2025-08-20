@@ -9,7 +9,8 @@ import { ProgramQueryResult } from '@/sanity.types'
 import ProgramHeader from '@/app/components/program/ProgramHeader'
 import ProgramBody from '@/app/components/program/ProgramBody'
 
-type Props = {
+// Define the props type directly for clarity
+type PageProps = {
   params: { slug: string }
 }
 
@@ -18,6 +19,7 @@ type Props = {
  * This tells Next.js which program pages to pre-build at build time.
  */
 export async function generateStaticParams() {
+  // Reverted to original destructuring
   const { data: slugs } = await sanityFetch<string[]>({
     query: programSlugsQuery,
     perspective: 'published',
@@ -32,7 +34,10 @@ export async function generateStaticParams() {
 /**
  * Generate metadata for the page (e.g., the <title> tag).
  */
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  // Reverted to original destructuring
   const { data: program } = await sanityFetch<ProgramQueryResult>({
     query: programPageQuery,
     params,
@@ -41,12 +46,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: program?.programName || 'Program Page',
-    description: `Learn more about the ${program?.programName || 'LTL'} program.`,
+    description: `Learn more about the ${
+      program?.programName || 'LTL'
+    } program.`,
   }
 }
 
-export default async function ProgramPage({ params }: Props) {
-  // Fetch the data for the specific program page
+export default async function ProgramPage({ params }: PageProps) {
+  // Reverted to original destructuring
   const { data: program } = await sanityFetch<ProgramQueryResult>({
     query: programPageQuery,
     params,
@@ -60,7 +67,10 @@ export default async function ProgramPage({ params }: Props) {
   return (
     <div>
       {/* Assemble the page using our new components */}
-      <ProgramHeader programName={program.programName} coverImage={program.coverImage} />
+      <ProgramHeader
+        programName={program.programName}
+        coverImage={program.coverImage}
+      />
       <ProgramBody
         description={program.description}
         status={program.status}
