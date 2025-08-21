@@ -1,15 +1,16 @@
-import {createClient} from 'next-sanity'
+// frontend/sanity/lib/client.ts
 
-import {apiVersion, dataset, projectId, studioUrl} from '@/sanity/lib/api'
-import {token} from './token'
+import { createClient } from 'next-sanity'
+
+import { apiVersion, dataset, projectId, studioUrl } from '@/sanity/lib/api'
 
 export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true,
+  // Set useCdn to false for development to ensure fresh data
+  useCdn: false,
   perspective: 'published',
-  token, // Required if you have a private dataset
   stega: {
     studioUrl,
     // Set logger to 'console' for more verbose logging

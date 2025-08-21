@@ -29,6 +29,7 @@ const linkFields = /* groq */ `
       }
 `
 
+// UPDATED: Simplified the getPageQuery to be more robust and handle all pageBuilder blocks.
 export const getPageQuery = defineQuery(`
   *[_type == 'page' && slug.current == $slug][0]{
     _id,
@@ -39,18 +40,7 @@ export const getPageQuery = defineQuery(`
     subheading,
     "pageBuilder": pageBuilder[]{
       ...,
-      _type == "callToAction" => {
-        ${linkFields},
-      },
-      _type == "infoSection" => {
-        content[]{
-          ...,
-          markDefs[]{
-            ...,
-            ${linkReference}
-          }
-        }
-      },
+      // Resolve references within any block that uses them
       _type == "teamGrid" => {
         "teamMembers": @.teamMembers[]->{
           _id,
@@ -58,6 +48,18 @@ export const getPageQuery = defineQuery(`
           role,
           "image": image.asset->url,
           bio
+        }
+      },
+      // Ensure links are resolved in any block that might have them
+      defined(link) => {
+        ${linkFields}
+      },
+      // Ensure portable text links are resolved
+      content[]{
+        ...,
+        markDefs[]{
+          ...,
+          ${linkReference}
         }
       }
     },
@@ -72,7 +74,6 @@ export const sitemapData = defineQuery(`
   }
 `)
 
-// MODIFIED FOR SPRINT 11: Restoring the correct, robust category filter.
 export const allPostsQuery = defineQuery(`
   *[_type == "post" && defined(slug.current) && category._ref in *[_type=="category" && title in ["News", "Blog", "Newsletter"]]._id] | order(date desc, _updatedAt desc) {
     ${postFields}
@@ -85,7 +86,6 @@ export const morePostsQuery = defineQuery(`
   }
 `)
 
-// MODIFIED FOR SPRINT 11: Fetches a single post for the detail page. Renamed from postQuery.
 export const singlePostQuery = defineQuery(`
   *[_type == "post" && slug.current == $slug] [0] {
     content[]{
@@ -109,7 +109,6 @@ export const pagesSlugs = defineQuery(`
   {"slug": slug.current}
 `)
 
-// Query for the Homepage
 export const homePageQuery = groq`
   *[_type == "page" && slug.current == 'home'][0] {
     _id,
@@ -126,7 +125,6 @@ export const homePageQuery = groq`
   }
 `
 
-// Query for a single Program Page
 export const programPageQuery = groq`
   *[_type == "program" && slug.current == $slug][0] {
     _id,
@@ -144,12 +142,10 @@ export const programPageQuery = groq`
   }
 `
 
-// Query to get all program slugs for generateStaticParams
 export const programSlugsQuery = groq`
 *[_type == "program" && defined(slug.current)][].slug.current
 `
 
-// Query to get a list of all programs for the "Our Work" index page
 export const allProgramsQuery = groq`
   *[_type == "program" && defined(slug.current)] | order(_createdAt desc) {
     _id,
@@ -159,7 +155,6 @@ export const allProgramsQuery = groq`
     "excerpt": array::join(string::split((pt::text(description[0...1])), "")[0...150], "") + "..."
   }
 `
-// New query to fetch all team members for the TeamGrid component
 export const allTeamMembersQuery = groq`
   *[_type == "person"] | order(name asc) {
     _id,
@@ -169,14 +164,6 @@ export const allTeamMembersQuery = groq`
   }
 `
 
-// ==================================================================
-// E-Shop Queries for Sprint 10
-// ==================================================================
-
-/**
- * Fetches a list of all products for the gallery page.
- * Includes the productName, slug, image, and price.
- */
 export const allProductsQuery = groq`
   *[_type == "product"] {
     _id,
@@ -187,9 +174,6 @@ export const allProductsQuery = groq`
   }
 `
 
-/**
- * Fetches all details for a single product based on its slug.
- */
 export const singleProductQuery = groq`
   *[_type == "product" && slug.current == $slug][0] {
     _id,
