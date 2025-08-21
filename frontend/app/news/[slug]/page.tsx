@@ -2,13 +2,27 @@
 
 import { notFound } from 'next/navigation'
 import { client } from '@/sanity/lib/client'
-import { singlePostQuery, type Post } from '@/sanity/lib/queries'
+import {
+  singlePostQuery,
+  postPagesSlugs, // Import the query for slugs
+  type Post,
+} from '@/sanity/lib/queries'
 import CoverImage from '@/app/components/CoverImage'
 import DateComponent from '@/app/components/Date'
 import Avatar from '@/app/components/Avatar'
 import PortableText from '@/app/components/PortableText'
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
+// Add generateStaticParams to inform Next.js of all possible post slugs
+export async function generateStaticParams() {
+  const slugs = await client.fetch<{ slug: string }[]>(postPagesSlugs)
+  return slugs.map(({ slug }) => ({ slug }))
+}
+
+export default async function PostPage({
+  params,
+}: {
+  params: { slug: string }
+}) {
   const post = await client.fetch<Post | null>(singlePostQuery, {
     slug: params.slug,
   })
@@ -26,10 +40,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
               {post.title}
             </h1>
             <div className="mb-8 flex items-center justify-center space-x-4 text-lg text-gray-600">
-              {/* CORRECTED: Pass the entire author object to the 'person' prop */}
-              {post.author && (
-                <Avatar person={post.author} date={post.date} />
-              )}
+              {post.author && <Avatar person={post.author} date={post.date} />}
             </div>
           </header>
 
