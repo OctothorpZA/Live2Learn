@@ -6,8 +6,10 @@ import PortableText from '@/app/components/PortableText'
 import ProductImage from '@/app/components/shop/ProductImage'
 import { sanityFetch } from '@/sanity/lib/live'
 import { allProductsQuery, singleProductQuery } from '@/sanity/lib/queries'
+// Import the new AddToCartButton component
+import AddToCartButton from '@/app/components/shop/AddToCartButton'
 
-// FIX: Define a local, explicit type for a Product to bypass the faulty generated type.
+// Define a local, explicit type for a Product to bypass the faulty generated type.
 type ProductType = {
   _id: string
   productName?: string | null
@@ -129,20 +131,8 @@ export default async function ProductDetailPage({
               )}
             </div>
 
-            {/* Add to Cart Button (Placeholder) */}
-            <div className="mt-10">
-              <button
-                type="button"
-                className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white shadow-sm transition-colors duration-300 ease-in-out hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                // The button is disabled to indicate it's a placeholder
-                disabled
-              >
-                Add to Cart
-              </button>
-              <p className="mt-2 text-center text-sm text-gray-500">
-                (Cart functionality coming soon)
-              </p>
-            </div>
+            {/* Replace the old button with our new interactive component */}
+            <AddToCartButton product={product} />
           </div>
         </div>
       </div>

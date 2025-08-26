@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
       // Add the hostname for our placeholder images
       {
         protocol: 'https',
-        hostname: 'placeholder.co',
+        hostname: 'placehold.co',
         port: '',
       },
     ],
