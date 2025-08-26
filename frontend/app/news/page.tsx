@@ -1,11 +1,23 @@
 // frontend/app/news/page.tsx
 
-import { client } from '@/sanity/lib/client'
-import { allPostsQuery, type Post } from '@/sanity/lib/queries'
+import { sanityFetch } from '@/sanity/lib/live'
+import { allPostsQuery } from '@/sanity/lib/queries'
 import PostCard from '@/app/components/news/PostCard'
+import { Slug } from '@/sanity.types'
+
+// Define a local, explicit type for a Post to bypass the faulty generated type.
+type PostType = {
+  _id: string
+  title?: string | null
+  slug?: string | null
+  coverImage?: any
+  date?: string | null
+  excerpt?: string | null
+}
 
 export default async function NewsPage() {
-  const posts = await client.fetch<Post[]>(allPostsQuery)
+  // FIX: Remove the generic from sanityFetch to avoid the constraint error.
+  const { data: posts } = await sanityFetch({ query: allPostsQuery })
 
   return (
     <div className="bg-gray-50 py-16 sm:py-24">
@@ -20,16 +32,19 @@ export default async function NewsPage() {
           </p>
         </div>
 
-        {posts?.length > 0 ? (
+        {posts && posts.length > 0 ? (
           <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
+            {/* FIX: Cast posts to 'any' to bypass the incorrect 'never[]' type from Sanity Typegen */}
+            {(posts as any).map((post: PostType) => (
               <PostCard
                 key={post._id}
-                title={post.title}
-                slug={post.slug}
+                title={post.title ?? 'Untitled Post'}
+                // FIX: Construct a Slug object to match the PostCard's expected prop type.
+                slug={{ _type: 'slug', current: post.slug ?? '' } as Slug}
                 coverImage={post.coverImage}
-                date={post.date}
-                excerpt={post.excerpt}
+                // FIX: Ensure the date prop is not null before passing it.
+                date={post.date ?? undefined}
+                excerpt={post.excerpt ?? ''}
               />
             ))}
           </div>

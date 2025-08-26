@@ -1,17 +1,19 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import type { PortableTextBlock } from 'next-sanity'
 
 import { sanityFetch } from '@/sanity/lib/live'
 import { programPageQuery, programSlugsQuery } from '@/sanity/lib/queries'
-import { ProgramQueryResult } from '@/sanity.types'
+// FIX: Corrected the import name for the query result type
+import { ProgramPageQueryResult } from '@/sanity.types'
 
 // Import the new components
 import ProgramHeader from '@/app/components/program/ProgramHeader'
 import ProgramBody from '@/app/components/program/ProgramBody'
 
-// Define the props type directly for clarity
+// FIX: The type for params is now a Promise, aligning with Next.js 15.
 type PageProps = {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 /**
@@ -19,14 +21,15 @@ type PageProps = {
  * This tells Next.js which program pages to pre-build at build time.
  */
 export async function generateStaticParams() {
-  // Reverted to original destructuring
-  const { data: slugs } = await sanityFetch<string[]>({
+  // FIX: Removed the incorrect generic type from sanityFetch.
+  const { data: slugs } = await sanityFetch({
     query: programSlugsQuery,
     perspective: 'published',
     stega: false,
   })
 
-  return (slugs || []).map((slug) => ({
+  // FIX: Explicitly type the 'slug' parameter to resolve the 'any' type error.
+  return (slugs || []).map((slug: string) => ({
     slug,
   }))
 }
@@ -35,10 +38,11 @@ export async function generateStaticParams() {
  * Generate metadata for the page (e.g., the <title> tag).
  */
 export async function generateMetadata({
-  params,
+  params: paramsPromise,
 }: PageProps): Promise<Metadata> {
-  // Reverted to original destructuring
-  const { data: program } = await sanityFetch<ProgramQueryResult>({
+  const params = await paramsPromise
+  // FIX: Removed the incorrect generic type from sanityFetch.
+  const { data: program } = await sanityFetch({
     query: programPageQuery,
     params,
     stega: false,
@@ -52,9 +56,13 @@ export async function generateMetadata({
   }
 }
 
-export default async function ProgramPage({ params }: PageProps) {
-  // Reverted to original destructuring
-  const { data: program } = await sanityFetch<ProgramQueryResult>({
+export default async function ProgramPage({
+  params: paramsPromise, // Renamed to avoid confusion
+}: PageProps) {
+  // FIX: Await the params promise to get the resolved value.
+  const params = await paramsPromise
+  // FIX: Removed the incorrect generic type from sanityFetch.
+  const { data: program } = await sanityFetch({
     query: programPageQuery,
     params,
   })
@@ -72,7 +80,7 @@ export default async function ProgramPage({ params }: PageProps) {
         coverImage={program.coverImage}
       />
       <ProgramBody
-        description={program.description}
+        description={program.description as PortableTextBlock[]}
         status={program.status}
         targetAudience={program.targetAudience}
         keyMetrics={program.keyMetrics}

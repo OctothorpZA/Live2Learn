@@ -12,7 +12,7 @@ const postFields = /* groq */ `
   excerpt,
   coverImage,
   "date": coalesce(date, _updatedAt),
-  "author": author->{firstName, lastName, picture},
+  "author": author->{name, picture},
 `
 
 const linkReference = /* groq */ `
@@ -50,11 +50,11 @@ export const getPageQuery = defineQuery(`
           bio
         }
       },
-      // Ensure links are resolved in any block that might have them
+      
       defined(link) => {
         ${linkFields}
       },
-      // Ensure portable text links are resolved
+      
       content[]{
         ...,
         markDefs[]{

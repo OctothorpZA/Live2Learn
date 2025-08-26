@@ -1,7 +1,12 @@
 'use client'
 
 // Import the auto-generated types for our page queries
-import { GetAllTeamMembersQueryResult, GetPageQueryResult, HomePageQueryResult } from '@/sanity.types'
+// FIX: Corrected the import name for the team members query result type
+import {
+  AllTeamMembersQueryResult,
+  GetPageQueryResult,
+  HomePageQueryResult,
+} from '@/sanity.types'
 
 // Import all the custom and generic section components
 import HeroSection from '@/app/components/sections/HeroSection'
@@ -39,7 +44,8 @@ export default function PageBuilder({
   teamMembers = [],
 }: {
   page: UniversalPageData
-  teamMembers?: GetAllTeamMembersQueryResult
+  // FIX: Use the corrected type name for the teamMembers prop
+  teamMembers?: AllTeamMembersQueryResult
 }) {
   const sections = (page?.pageBuilder as AnySection[]) || []
 
@@ -65,13 +71,18 @@ export default function PageBuilder({
         }
 
         // The generic components from the template expect a prop named 'block'
-        if (section._type === 'callToAction' || section._type === 'infoSection') {
+        if (
+          section._type === 'callToAction' ||
+          section._type === 'infoSection'
+        ) {
           return <Component key={section._key} block={section} />
         }
-        
-        // **Crucial Fix**: If the section is a teamGrid, pass the teamMembers data to it
+
+        // If the section is a teamGrid, pass the teamMembers data to it
         if (section._type === 'teamGrid') {
-          return <Component key={section._key} {...section} teamMembers={teamMembers} />
+          return (
+            <Component key={section._key} {...section} teamMembers={teamMembers} />
+          )
         }
 
         return <Component key={section._key} {...section} />

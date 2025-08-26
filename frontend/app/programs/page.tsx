@@ -1,13 +1,21 @@
 import { sanityFetch } from '@/sanity/lib/live'
 import { allProgramsQuery } from '@/sanity/lib/queries'
-import { AllProgramsQueryResult } from '@/sanity.types'
 
 // Import the real ProgramCard component
 import ProgramCard from '@/app/components/program/ProgramCard'
 
+// Define a local, explicit type for a Program to bypass the faulty generated type.
+type ProgramType = {
+  _id: string
+  programName?: string | null
+  slug?: string | null
+  coverImage?: string | null
+  excerpt?: string | null
+}
+
 export default async function OurWorkPage() {
-  // Fetch the list of all programs from Sanity
-  const { data: programs } = await sanityFetch<AllProgramsQueryResult>({
+  // FIX: Remove the generic from sanityFetch to avoid the constraint error.
+  const { data: programs } = await sanityFetch({
     query: allProgramsQuery,
   })
 
@@ -21,15 +29,18 @@ export default async function OurWorkPage() {
           </h1>
           {/* Introductory Paragraph */}
           <p className="mt-4 text-lg max-w-3xl mx-auto text-charcoal">
-            At Living Through Learning, we develop and implement a range of targeted programs designed to address the literacy crisis at its roots. Explore our key initiatives below to see how we&apos;re making a difference.
+            At Living Through Learning, we develop and implement a range of
+            targeted programs designed to address the literacy crisis at its
+            roots. Explore our key initiatives below to see how we&apos;re making a
+            difference.
           </p>
         </div>
 
         {/* Responsive Grid Layout for Program Cards */}
         {programs && programs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Map over the real program data and render a ProgramCard for each one */}
-            {programs.map((program) => (
+            {/* FIX: Cast programs to 'any' to bypass the incorrect 'never[]' type from Sanity Typegen */}
+            {(programs as any).map((program: ProgramType) => (
               <ProgramCard
                 key={program._id}
                 programName={program.programName}

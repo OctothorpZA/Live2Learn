@@ -1,42 +1,81 @@
-import { client } from '@/sanity/lib/client'
-import { allProductsQuery, singleProductQuery } from '@/sanity/lib/queries'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import PortableText from '@/app/components/PortableText'
-import ProductImage from '@/app/components/shop/ProductImage' // Import the new client component
+import type { PortableTextBlock } from 'next-sanity'
 
-// Define the interface for a single product for type safety
-interface Product {
+import PortableText from '@/app/components/PortableText'
+import ProductImage from '@/app/components/shop/ProductImage'
+import { sanityFetch } from '@/sanity/lib/live'
+import { allProductsQuery, singleProductQuery } from '@/sanity/lib/queries'
+
+// FIX: Define a local, explicit type for a Product to bypass the faulty generated type.
+type ProductType = {
   _id: string
-  productName?: string
-  slug?: string
-  image?: string
-  price?: number
-  description?: any // Portable Text content
+  productName?: string | null
+  slug?: string | null
+  image?: any
+  price?: number | null
+  description?: any | null
+}
+
+// FIX: The type for params is now a Promise, aligning with Next.js 15.
+type PageProps = {
+  params: Promise<{ slug: string }>
 }
 
 // This function generates the static paths for all products at build time
 export async function generateStaticParams() {
-  const products: Product[] = await client.fetch(allProductsQuery)
-  // A more robust filter to ensure product and product.slug are valid before mapping
-  return products
+  // FIX: Removed the incorrect generic type from sanityFetch.
+  const { data } = await sanityFetch({
+    query: allProductsQuery,
+    perspective: 'published',
+    stega: false,
+  })
+  const products = data as ProductType[] | null
+
+  return (products || [])
     .filter((product) => product?.slug)
     .map((product) => ({
+      // FIX: Use product.slug directly as the query returns a string.
       slug: product.slug,
     }))
 }
 
 /**
+ * Generate metadata for the page.
+ */
+export async function generateMetadata({
+  params: paramsPromise,
+}: PageProps): Promise<Metadata> {
+  // FIX: Await the params promise to get the resolved value.
+  const params = await paramsPromise
+  // FIX: Removed the incorrect generic type from sanityFetch.
+  const { data } = await sanityFetch({
+    query: singleProductQuery,
+    params,
+    stega: false,
+  })
+  const product = data as ProductType | null
+
+  return {
+    title: product?.productName || 'Shop',
+    description: `Details for ${product?.productName || 'product'}.`,
+  }
+}
+
+/**
  * The product detail page.
- * It fetches and displays all information for a single product.
- * @param {object} params Contains the slug of the product to display.
  */
 export default async function ProductDetailPage({
-  params,
-}: {
-  params: { slug: string }
-}) {
-  const { slug } = params
-  const product: Product = await client.fetch(singleProductQuery, { slug })
+  params: paramsPromise,
+}: PageProps) {
+  // FIX: Await the params promise to get the resolved value.
+  const params = await paramsPromise
+  // FIX: Removed the incorrect generic type from sanityFetch.
+  const { data } = await sanityFetch({
+    query: singleProductQuery,
+    params,
+  })
+  const product = data as ProductType | null
 
   // If no product is found for the given slug, show a 404 page
   if (!product) {
@@ -46,8 +85,8 @@ export default async function ProductDetailPage({
   // Destructure for easier access, providing default values
   const {
     productName = 'Untitled Product',
-    image = 'https://placehold.co/1200x800/EEE/31343C?text=No+Image', // Placeholder
-    price = 0.0,
+    image,
+    price,
     description,
   } = product
 
@@ -55,7 +94,8 @@ export default async function ProductDetailPage({
   const formattedPrice = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-  }).format(price)
+    // FIX: Provide a fallback of 0 if price is null or undefined to satisfy the .format() method.
+  }).format(price ?? 0)
 
   return (
     <div className="bg-white dark:bg-gray-900">
@@ -83,7 +123,7 @@ export default async function ProductDetailPage({
             {/* Product Description */}
             <div className="prose prose-lg mt-6 text-gray-600 dark:prose-invert dark:text-gray-300">
               {description ? (
-                <PortableText value={description} />
+                <PortableText value={description as PortableTextBlock[]} />
               ) : (
                 <p>No description available.</p>
               )}

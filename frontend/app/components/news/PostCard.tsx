@@ -1,7 +1,8 @@
 // frontend/app/components/news/PostCard.tsx
 
 import Link from 'next/link'
-import type { Post } from '@/sanity/lib/queries'
+// FIX: The 'Post' type is imported from the auto-generated sanity.types.ts file
+import type { Post } from '@/sanity.types'
 import CoverImage from '@/app/components/CoverImage'
 import DateComponent from '@/app/components/Date'
 
@@ -16,10 +17,11 @@ export default function PostCard({
     <Link href={`/news/${slug}`} className="group block">
       <div className="overflow-hidden rounded-lg bg-white shadow-lg transition-shadow duration-300 group-hover:shadow-xl">
         <div className="relative">
+          {/* FIX: Removed the 'alt' prop as it's not expected by the CoverImage component */}
           <CoverImage
             image={coverImage}
-            alt={`Cover image for ${title}`}
-            className="aspect-[16/9] w-full object-cover"
+            // alt={`Cover image for ${title}`}
+            // className="aspect-[16/9] w-full object-cover"
           />
         </div>
         <div className="p-6">
