@@ -854,6 +854,9 @@ export type AllProductsQueryResult = Array<never>
 // Variable: singleProductQuery
 // Query: *[_type == "product" && slug.current == $slug][0] {    _id,    productName,    "slug": slug.current,    "image": image.asset->url,    price,    description,  }
 export type SingleProductQueryResult = null
+// Variable: allSchoolPartnersQuery
+// Query: *[_type == "schoolPartner" && defined(latitude) && defined(longitude)] {    _id,    schoolName,    status,    latitude,    longitude  }
+export type AllSchoolPartnersQueryResult = Array<never>
 
 // Query TypeMap
 import '@sanity/client'
@@ -874,5 +877,6 @@ declare module '@sanity/client' {
     '\n  *[_type == "person"] | order(name asc) {\n    _id,\n    name,\n    role,\n    "image": image.asset->url\n  }\n': AllTeamMembersQueryResult
     '\n  *[_type == "product"] {\n    _id,\n    productName,\n    "slug": slug.current,\n    "image": image.asset->url,\n    price,\n  }\n': AllProductsQueryResult
     '\n  *[_type == "product" && slug.current == $slug][0] {\n    _id,\n    productName,\n    "slug": slug.current,\n    "image": image.asset->url,\n    price,\n    description,\n  }\n': SingleProductQueryResult
+    '\n  *[_type == "schoolPartner" && defined(latitude) && defined(longitude)] {\n    _id,\n    schoolName,\n    status,\n    latitude,\n    longitude\n  }\n': AllSchoolPartnersQueryResult
   }
 }

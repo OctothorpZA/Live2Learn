@@ -1,15 +1,29 @@
 // /frontend/app/impact/page.tsx
 
-import ImpactMap from '@/app/components/impact/ImpactMap'
+// FIX: Import 'dynamic' from 'next/dynamic' to load the map component on the client-side only
+// import dynamic from 'next/dynamic'
 import { sanityFetch } from '@/sanity/lib/live'
 import { allSchoolPartnersQuery } from '@/sanity/lib/queries'
-import { AllSchoolPartnersQueryResult } from '@/sanity.types'
+// Import the new MapLoader component
+import MapLoader from '@/app/components/impact/MapLoader'
+
+// Define a local, explicit type to prevent potential build errors from faulty auto-generated types
+export type LocationType = {
+  _id: string
+  schoolName?: string | null
+  status?: string | null
+  latitude?: number | null
+  longitude?: number | null
+}
 
 export default async function ImpactPage() {
   // Fetch the list of all school partners using our new query
-  const { data: locations } = await sanityFetch<AllSchoolPartnersQueryResult>({
+  const { data } = await sanityFetch({
     query: allSchoolPartnersQuery,
   })
+
+  // Use a type assertion to ensure the data is correctly typed
+  const locations = (data as LocationType[]) || []
 
   return (
     <div>
@@ -24,8 +38,8 @@ export default async function ImpactPage() {
           </p>
         </div>
         <div className="h-[600px] w-full rounded-lg shadow-lg overflow-hidden">
-          {/* Pass the fetched location data to the map component */}
-          <ImpactMap locations={locations || []} />
+          {/* Use the MapLoader to render the map on the client side */}
+          <MapLoader locations={locations} />
         </div>
       </div>
     </div>
