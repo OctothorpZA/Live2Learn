@@ -1,5 +1,5 @@
-import {HomeIcon} from '@sanity/icons'
-import {defineField, defineType} from 'sanity'
+import { HomeIcon } from '@sanity/icons'
+import { defineField, defineType } from 'sanity'
 
 /**
  * School Partner schema. Defines the structure for LTL's partner schools.
@@ -17,12 +17,28 @@ export const schoolPartner = defineType({
       type: 'string',
       validation: (rule) => rule.required(),
     }),
+    // FIX: Add Latitude field for map coordinates
+    defineField({
+      name: 'latitude',
+      title: 'Latitude',
+      type: 'number',
+      description: 'The latitude coordinate of the school. E.g., -33.9249',
+      validation: (rule) => rule.required(),
+    }),
+    // FIX: Add Longitude field for map coordinates
+    defineField({
+      name: 'longitude',
+      title: 'Longitude',
+      type: 'number',
+      description: 'The longitude coordinate of the school. E.g., 18.4241',
+      validation: (rule) => rule.required(),
+    }),
     defineField({
       name: 'status',
       title: 'Status',
       type: 'string',
       options: {
-        list: ['Current', 'Former', 'Prospective'],
+        list: ['Current Partner', 'Former (Education Alive NPO)', 'Prospective', 'Head Office'],
         layout: 'radio',
       },
       validation: (rule) => rule.required(),
@@ -43,7 +59,8 @@ export const schoolPartner = defineType({
       name: 'partnershipYear',
       title: 'Partnership Start Year',
       type: 'number',
-      validation: (rule) => rule.integer().min(2000).max(new Date().getFullYear()),
+      validation: (rule) =>
+        rule.integer().min(2000).max(new Date().getFullYear()),
     }),
     defineField({
       name: 'photo',
@@ -59,13 +76,6 @@ export const schoolPartner = defineType({
       title: 'schoolName',
       subtitle: 'status',
       media: 'photo',
-    },
-    prepare({title, subtitle, media}) {
-      return {
-        title,
-        subtitle: `Status: ${subtitle}`,
-        media: media || HomeIcon,
-      }
     },
   },
 })

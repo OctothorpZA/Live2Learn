@@ -1,5 +1,8 @@
 import './globals.css'
-import { Analytics } from "@vercel/analytics/next"
+// FIX: Import the Leaflet CSS for map styling
+import 'leaflet/dist/leaflet.css'
+
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 // Import Poppins and Noto Sans from next/font/google
@@ -68,11 +71,18 @@ const notoSans = Noto_Sans({
   display: 'swap',
 })
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const { isEnabled: isDraftMode } = await draftMode()
 
   return (
-    <html lang="en" className={`${poppins.variable} ${notoSans.variable} bg-white text-charcoal`}>
+    <html
+      lang="en"
+      className={`${poppins.variable} ${notoSans.variable} bg-white text-charcoal`}
+    >
       <body className="font-body">
         <section className="min-h-screen flex flex-col">
           {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
@@ -86,12 +96,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           )}
           {/* The <SanityLive> component is responsible for making all sanityFetch calls in your application live, so should always be rendered. */}
           <SanityLive onError={handleError} />
-          
+
           <Header />
-          
+
           {/* Add padding-top to main content to account for the fixed header height (h-20) */}
           <main className="flex-grow pt-20">{children}</main>
-          
+
           <Footer />
         </section>
         {/* The <Analytics> component is responsible for rendering the Vercel Analytics widget */}

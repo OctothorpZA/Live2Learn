@@ -184,3 +184,13 @@ export const singleProductQuery = groq`
     description,
   }
 `
+
+export const allSchoolPartnersQuery = groq`
+  *[_type == "schoolPartner" && defined(latitude) && defined(longitude)] {
+    _id,
+    schoolName,
+    status,
+    latitude,
+    longitude
+  }
+`
