@@ -63,7 +63,7 @@ export default function ContactPage() {
             <div className="space-y-6 text-gray-700">
               <div>
                 <h3 className="font-semibold">Address</h3>
-                <p>123 Learning Lane, Cape Town, 8001, South Africa</p>
+                <p>Suite 5, Burlington Arcade, cnr Main, Park & Lester Roads, Wynberg, South Africa</p>
               </div>
               <div>
                 <h3 className="font-semibold">Phone</h3>
@@ -73,10 +73,10 @@ export default function ContactPage() {
                 <h3 className="font-semibold">Email</h3>
                 <p>
                   <a
-                    href="mailto:info@livingthroughlearning.org"
+                    href="mailto:info@livingthroughlearning.org.za"
                     className="text-ltl-orange-500 hover:underline"
                   >
-                    info@livingthroughlearning.org
+                    info@livingthroughlearning.org.za
                   </a>
                 </p>
               </div>
