@@ -142,25 +142,10 @@ export default function ImpactMap({ locations }: ImpactMapProps) {
       dragging={true}
       zoomControl={true}
       style={{ height: '100%', width: '100%' }}
-      zoomControlOptions={{ position: 'topright' }}
-      whenCreated={(map) => {
-        // Store map instance for CenterOnHQComponent
-        (window as any).leafletMap = map
-        
-        // Optimize for mobile touch interactions
-        if (typeof window !== 'undefined' && 'ontouchstart' in window) {
-          map.dragging.disable()
-          map.touchZoom.disable()
-          map.doubleClickZoom.disable()
-          map.scrollWheelZoom.disable()
-          
-          // Re-enable after a short delay to prevent conflicts
-          setTimeout(() => {
-            map.dragging.enable()
-            map.touchZoom.enable()
-            map.doubleClickZoom.enable()
-            map.scrollWheelZoom.enable()
-          }, 100)
+      ref={(mapInstance) => {
+        if (mapInstance) {
+          // Store map instance for CenterOnHQComponent
+          (window as any).leafletMap = mapInstance
         }
       }}
     >

@@ -36,7 +36,7 @@ export default async function Footer() {
     stega: false,
   })
   
-  const socialMediaLinks: SocialMediaLink[] = settings?.socialMediaLinks?.filter(
+  const socialMediaLinks: SocialMediaLink[] = (settings?.socialMediaLinks as SocialMediaLink[] | null)?.filter(
     (link: SocialMediaLink) => link.isVisible
   ) || []
   return (

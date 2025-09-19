@@ -1,3 +1,4 @@
+import React from 'react'
 import Link from 'next/link'
 
 type SocialMediaIconProps = {
@@ -70,7 +71,7 @@ const DefaultIcon = ({ label }: { label: string }) => (
   </div>
 )
 
-const iconMap: Record<string, () => JSX.Element> = {
+const iconMap: Record<string, () => React.JSX.Element> = {
   facebook: FacebookIcon,
   twitter: TwitterIcon,
   instagram: InstagramIcon,

@@ -98,7 +98,7 @@ type ModernHomePageProps = {
 
 export default function ModernHomePage({ pageData }: ModernHomePageProps) {
   // Extract hero data from pageBuilder if available
-  const heroSection = pageData?.pageBuilder?.find((section: any) => section._type === 'hero')
+  const heroSection = pageData?.pageBuilder?.find((section: any) => section._type === 'hero') as any
   const impactSection = pageData?.pageBuilder?.find((section: any) => section._type === 'impact')
   const storySection = pageData?.pageBuilder?.find((section: any) => section._type === 'story')
 

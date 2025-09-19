@@ -98,7 +98,7 @@ type HybridHomePageProps = {
 
 export default function HybridHomePage({ pageData }: HybridHomePageProps) {
   // Extract hero data from pageBuilder if available
-  const heroSection = pageData?.pageBuilder?.find((section: any) => section._type === 'hero')
+  const heroSection = pageData?.pageBuilder?.find((section: any) => section._type === 'hero') as any
   
   // Impact metrics - can be overridden by page builder impact sections
   const impactMetrics = [
