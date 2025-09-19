@@ -2,28 +2,34 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+// Import the new CartIcon component
+import CartIcon from '@/app/components/shop/CartIcon'
 
 // Main Header Component based on Sprint 3 Wireframe
 export default function Header() {
   // State to manage the mobile menu's visibility
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  // **Crucial Fix**: Updated the 'Our Work' link to point to the correct '/programs' route.
   const navLinks = [
     { href: '/programs', label: 'Our Work' },
     { href: '/about', label: 'About Us' },
     { href: '/get-involved', label: 'Get Involved' },
     { href: '/news', label: 'News & Stories' },
     { href: '/contact', label: 'Contact' },
+    // Add the shop link to the main navigation
+    { href: '/shop', label: 'Shop' },
   ]
 
   return (
     <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo Section - Using a text placeholder for now */}
+          {/* Logo Section */}
           <div className="flex-shrink-0">
-            <Link href="/" className="text-2xl font-bold font-heading text-ltl-deep-blue">
+            <Link
+              href="/"
+              className="text-2xl font-bold font-heading text-ltl-deep-blue"
+            >
               LTL Logo
             </Link>
           </div>
@@ -41,18 +47,22 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Donate Button (Desktop) */}
-          <div className="hidden md:block">
+          {/* Right-side actions (Desktop) */}
+          <div className="hidden md:flex items-center space-x-4">
             <Link
               href="/donate"
               className="inline-block bg-hopeful-yellow text-charcoal font-bold py-2 px-6 rounded-md hover:bg-yellow-400 transition-colors duration-200"
             >
               Donate
             </Link>
+            {/* Add the CartIcon for desktop view */}
+            <CartIcon />
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          {/* Mobile Menu Button and Cart Icon */}
+          <div className="md:hidden flex items-center space-x-2">
+            {/* Add the CartIcon for mobile view */}
+            <CartIcon />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-charcoal hover:text-ltl-deep-blue hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-ltl-deep-blue"

@@ -151,6 +151,13 @@ export const settings = defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'socialMediaLinks',
+      title: 'Social Media Links',
+      type: 'array',
+      description: 'Add social media links and contact information for the footer and other areas of the site',
+      of: [{type: 'socialMediaIcon'}],
+    }),
   ],
   preview: {
     prepare() {

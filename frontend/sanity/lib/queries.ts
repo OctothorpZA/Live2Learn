@@ -2,7 +2,15 @@
 
 import { defineQuery, groq } from 'next-sanity'
 
-export const settingsQuery = defineQuery(`*[_type == "settings"][0]`)
+export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
+  ...,
+  socialMediaLinks[]{
+    platform,
+    url,
+    customLabel,
+    isVisible
+  }
+}`)
 
 const postFields = /* groq */ `
   _id,
@@ -182,5 +190,15 @@ export const singleProductQuery = groq`
     "image": image.asset->url,
     price,
     description,
+  }
+`
+
+export const allSchoolPartnersQuery = groq`
+  *[_type == "schoolPartner" && defined(latitude) && defined(longitude)] {
+    _id,
+    schoolName,
+    status,
+    latitude,
+    longitude
   }
 `

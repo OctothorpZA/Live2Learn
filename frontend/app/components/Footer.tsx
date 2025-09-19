@@ -1,11 +1,14 @@
 import Link from 'next/link'
+import { sanityFetch } from '@/sanity/lib/live'
+import { settingsQuery } from '@/sanity/lib/queries'
+import SocialMediaIcon from './SocialMediaIcon'
 
-// Placeholder for social media icons
-const SocialIcon = ({ platform }: { platform: string }) => (
-  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-xs text-gray-600">
-    {platform.charAt(0)}
-  </div>
-)
+type SocialMediaLink = {
+  platform: string
+  url: string
+  customLabel?: string
+  isVisible: boolean
+}
 
 // Stroopwafel Icon for the developer credit
 const StroopwafelIcon = () => (
@@ -26,7 +29,16 @@ const StroopwafelIcon = () => (
 )
 
 // Main Footer Component based on Sprint 3 Wireframe
-export default function Footer() {
+export default async function Footer() {
+  // Fetch settings data including social media links
+  const { data: settings } = await sanityFetch({
+    query: settingsQuery,
+    stega: false,
+  })
+  
+  const socialMediaLinks: SocialMediaLink[] = settings?.socialMediaLinks?.filter(
+    (link: SocialMediaLink) => link.isVisible
+  ) || []
   return (
     <footer className="bg-light-slate text-charcoal border-t border-gray-200 relative overflow-hidden">
       {/* Background pattern from the original template */}
@@ -41,12 +53,18 @@ export default function Footer() {
             <p className="text-base max-w-md">
               Living Through Learning is dedicated to unlocking a child&apos;s future, one word at a time.
             </p>
-            <div className="mt-4 flex space-x-4">
-              <SocialIcon platform="FB" />
-              <SocialIcon platform="TW" />
-              <SocialIcon platform="IG" />
-              <SocialIcon platform="LI" />
-            </div>
+            {socialMediaLinks.length > 0 && (
+              <div className="mt-4 flex space-x-3">
+                {socialMediaLinks.map((link, index) => (
+                  <SocialMediaIcon
+                    key={index}
+                    platform={link.platform}
+                    url={link.url}
+                    customLabel={link.customLabel}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Secondary Navigation */}
