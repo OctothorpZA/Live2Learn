@@ -256,7 +256,7 @@ export default function ModernHomePage({ pageData }: ModernHomePageProps) {
               Every Child Deserves the Gift of Reading
             </h2>
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-              We believe that literacy is the foundation of opportunity. Through innovative programs, dedicated partnerships, and community-centered approaches, we're building a South Africa where every child can read, learn, and thrive.
+              We believe that literacy is the foundation of opportunity. Through innovative programs, dedicated partnerships, and community-centered approaches, we&apos;re building a South Africa where every child can read, learn, and thrive.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               <Link

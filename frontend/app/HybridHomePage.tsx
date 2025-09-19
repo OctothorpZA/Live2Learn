@@ -174,7 +174,7 @@ export default function HybridHomePage({ pageData }: HybridHomePageProps) {
                 </>
               ) : (
                 <>
-                  Unlocking Every Child's
+                  Unlocking Every Child&apos;s
                   <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-hopeful-yellow via-yellow-300 to-orange-400 drop-shadow-sm">
                     Learning Potential
@@ -297,7 +297,7 @@ export default function HybridHomePage({ pageData }: HybridHomePageProps) {
               Every Child Deserves the Gift of Reading
             </h2>
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-              We believe that literacy is the foundation of opportunity. Through innovative programs, dedicated partnerships, and community-centered approaches, we're building a South Africa where every child can read, learn, and thrive.
+              We believe that literacy is the foundation of opportunity. Through innovative programs, dedicated partnerships, and community-centered approaches, we&apos;re building a South Africa where every child can read, learn, and thrive.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               <Link

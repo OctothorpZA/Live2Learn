@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { sendContactEmail } from '@/app/actions'
 
 // Custom SVG Icons
@@ -391,18 +392,18 @@ export default function ContactPage() {
             Join our community of educators, volunteers, and partners working together to unlock every child&apos;s potential through literacy.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
+            <Link
               href="/get-involved"
               className="bg-ltl-deep-blue hover:bg-ltl-deep-blue/90 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 hover:-translate-y-1 shadow-lg hover:shadow-xl"
             >
               Explore Opportunities
-            </a>
-            <a
+            </Link>
+            <Link
               href="/programs"
               className="bg-white hover:bg-gray-50 text-ltl-deep-blue px-8 py-4 rounded-xl font-semibold transition-all duration-200 hover:-translate-y-1 shadow-lg hover:shadow-xl border-2 border-ltl-deep-blue/20"
             >
               View Our Programs
-            </a>
+            </Link>
           </div>
         </div>
       </section>

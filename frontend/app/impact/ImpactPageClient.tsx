@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import MapLoader from '@/app/components/impact/MapLoader'
 import { LocationType } from './page'
 
@@ -243,18 +244,18 @@ export default function ImpactPageClient({ locations }: ImpactPageClientProps) {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center animate-fade-in-up max-w-md sm:max-w-none mx-auto" style={{ animationDelay: '0.2s' }}>
-            <a
+            <Link
               href="/news"
               className="bg-ltl-deep-blue hover:bg-ltl-deep-blue/90 text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold transition-all duration-200 hover:-translate-y-1 shadow-lg hover:shadow-xl text-sm md:text-base"
             >
               Read Success Stories
-            </a>
-            <a
+            </Link>
+            <Link
               href="/programs"
               className="bg-white hover:bg-gray-50 text-ltl-deep-blue px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold transition-all duration-200 hover:-translate-y-1 shadow-lg hover:shadow-xl border-2 border-ltl-deep-blue/20 text-sm md:text-base"
             >
               Explore Programs
-            </a>
+            </Link>
           </div>
         </div>
       </section>

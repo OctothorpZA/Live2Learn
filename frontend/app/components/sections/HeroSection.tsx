@@ -60,7 +60,7 @@ export default function HeroSection({
             </>
           ) : (
             <>
-              Unlocking Every Child's
+              Unlocking Every Child&apos;s
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-hopeful-yellow via-yellow-300 to-orange-400 drop-shadow-lg">
                 Learning Potential

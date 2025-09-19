@@ -42,7 +42,7 @@ export default function SolutionSection({ heading, solutions }: SolutionSectionP
             {heading || 'Our Innovative Solutions'}
           </h2>
           <p className="text-xl text-charcoal/70 max-w-2xl mx-auto">
-            Discover how we're transforming literacy education across South Africa
+            Discover how we&apos;re transforming literacy education across South Africa
           </p>
         </div>
 
