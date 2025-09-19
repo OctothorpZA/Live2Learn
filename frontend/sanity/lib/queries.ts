@@ -2,7 +2,15 @@
 
 import { defineQuery, groq } from 'next-sanity'
 
-export const settingsQuery = defineQuery(`*[_type == "settings"][0]`)
+export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
+  ...,
+  socialMediaLinks[]{
+    platform,
+    url,
+    customLabel,
+    isVisible
+  }
+}`)
 
 const postFields = /* groq */ `
   _id,

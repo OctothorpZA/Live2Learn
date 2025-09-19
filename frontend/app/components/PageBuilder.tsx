@@ -18,6 +18,11 @@ import TeamGrid from '@/app/components/sections/TeamGrid'
 import Cta from '@/app/components/Cta'
 import InfoSection from '@/app/components/InfoSection'
 
+// Import new modern components
+import ModernImpactSection from '@/app/components/sections/ModernImpactSection'
+import FeatureCards from '@/app/components/sections/FeatureCards'
+import NewsletterSection from '@/app/components/sections/NewsletterSection'
+
 // This is the mapping from Sanity schema types to our React components
 const components: { [key: string]: React.ComponentType<any> } = {
   hero: HeroSection,
@@ -28,6 +33,10 @@ const components: { [key: string]: React.ComponentType<any> } = {
   teamGrid: TeamGrid,
   callToAction: Cta,
   infoSection: InfoSection,
+  // Modern enhanced components
+  modernImpact: ModernImpactSection,
+  featureCards: FeatureCards,
+  newsletter: NewsletterSection,
 }
 
 type AnySection = {

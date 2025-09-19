@@ -5,6 +5,7 @@ import { callToAction } from './objects/callToAction'
 import { infoSection } from './objects/infoSection'
 import { settings } from './singletons/settings'
 import { link } from './objects/link'
+import { socialMediaIcon } from './objects/socialMediaIcon'
 import { blockContent } from './objects/blockContent'
 
 // Import the existing section schemas
@@ -29,6 +30,7 @@ export const schemaTypes = [
   infoSection,
   callToAction,
   link,
+  socialMediaIcon,
   // Page builder sections
   hero,
   challenge,

@@ -10,7 +10,7 @@ Built as a modern monorepo with Next.js 15 and Sanity CMS, this website serves a
 
 - **📊 Interactive Impact Hub**: Leaflet-powered map showing school partnerships and geographic reach
 - **🛒 E-Commerce Platform**: Complete product catalog with shopping cart functionality
-- **📰 Content Management**: Dynamic news, stories, and blog system with category filtering  
+- **📰 Content Management**: Dynamic news, stories, and blog system with category filtering
 - **👥 Team Showcase**: Comprehensive about section with team member profiles
 - **📚 Program Directory**: Detailed program pages with metrics and impact data
 - **📞 Contact Integration**: Brevo API-powered contact forms and engagement tools
@@ -20,6 +20,7 @@ Built as a modern monorepo with Next.js 15 and Sanity CMS, this website serves a
 ## 🏗️ Technical Architecture
 
 **Frontend Stack:**
+
 - Next.js 15 with App Router
 - TypeScript with strict configuration
 - Tailwind CSS 4.x with custom design tokens
@@ -27,12 +28,14 @@ Built as a modern monorepo with Next.js 15 and Sanity CMS, this website serves a
 - Leaflet + React-Leaflet for interactive mapping
 
 **Backend & CMS:**
+
 - Sanity.io with Live Content API
 - Real-time visual editing capabilities
 - Custom content schemas for educational content
 - Structured page builder system
 
 **Integrations:**
+
 - Brevo API for email marketing and contact management
 - PayFast payment gateway (South African e-commerce)
 - Vercel Analytics and Speed Insights
@@ -41,11 +44,13 @@ Built as a modern monorepo with Next.js 15 and Sanity CMS, this website serves a
 ## 🎯 Project Status
 
 **Development Phase**: Sprints 1-15 Complete ✅
+
 - All core functionality implemented
 - Production-ready build system
 - 98% feature completion
 
 **Current Status**: Production-ready with one technical debt item
+
 - ⚠️ PayFast payment integration blocked by signature validation issue
 - ✅ All other systems fully functional
 
@@ -53,13 +58,14 @@ Built as a modern monorepo with Next.js 15 and Sanity CMS, this website serves a
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - Sanity CLI (`npm install -g @sanity/cli`)
 
 ### Development Setup
 
 1. **Clone and Install**
+
    ```bash
    git clone <repository-url>
    cd ltl-marketing-site
@@ -67,14 +73,16 @@ Built as a modern monorepo with Next.js 15 and Sanity CMS, this website serves a
    ```
 
 2. **Environment Configuration**
-   
+
    Copy the example environment files and configure:
+
    ```bash
    cp frontend/.env.example frontend/.env.local
    cp studio/.env.example studio/.env
    ```
 
    Required environment variables:
+
    ```bash
    # Sanity Configuration
    NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
@@ -92,29 +100,32 @@ Built as a modern monorepo with Next.js 15 and Sanity CMS, this website serves a
    ```
 
 3. **Start Development Servers**
+
    ```bash
    npm run dev
    ```
-   
+
    This runs both:
-   - Frontend: http://localhost:3000
-   - Sanity Studio: http://localhost:3333
+   - Frontend: <http://localhost:3000>
+   - Sanity Studio: <http://localhost:3333>
 
 ### Content Management
 
 1. **Import Sample Data** (Optional)
+
    ```bash
    npm run import-sample-data
    ```
 
 2. **Access Sanity Studio**
-   - Navigate to http://localhost:3333
+   - Navigate to <http://localhost:3333>
    - Sign in with your Sanity account
    - Start creating content using the predefined schemas
 
 ## 📦 Available Commands
 
 ### Development
+
 ```bash
 npm run dev              # Start both frontend and studio
 npm run dev:next         # Frontend only (port 3000)
@@ -122,6 +133,7 @@ npm run dev:studio       # Studio only (port 3333)
 ```
 
 ### Building & Testing
+
 ```bash
 npm run build            # Build for production
 npm run lint             # ESLint frontend code
@@ -130,6 +142,7 @@ npm run format           # Prettier code formatting
 ```
 
 ### Content Management
+
 ```bash
 npm run import-sample-data    # Import sample content
 npm run typegen              # Generate TypeScript types from Sanity schemas
@@ -149,6 +162,7 @@ npm run typegen              # Generate TypeScript types from Sanity schemas
 ## 🔧 Content Schemas
 
 **Documents:**
+
 - `page` - Dynamic pages with page builder
 - `post` - News, blog posts, newsletters with categories
 - `person` - Team members and authors
@@ -157,6 +171,7 @@ npm run typegen              # Generate TypeScript types from Sanity schemas
 - `schoolPartner` - Partner schools with coordinates
 
 **Page Builder Components:**
+
 - Hero sections with CTAs
 - Challenge statements
 - Solution presentations
@@ -179,6 +194,7 @@ npm run typegen              # Generate TypeScript types from Sanity schemas
    - Ensure production values for APIs and services
 
 3. **Deploy Sanity Studio**
+
    ```bash
    cd studio
    npx sanity deploy
@@ -186,7 +202,8 @@ npm run typegen              # Generate TypeScript types from Sanity schemas
 
 ## 🛠️ Technical Debt & Known Issues
 
-**PayFast Integration**: 
+**PayFast Integration**:
+
 - Payment processing blocked by signature mismatch error
 - Shopping cart fully functional, checkout requires resolution
 - Resolution: Requires PayFast developer support engagement
@@ -194,12 +211,14 @@ npm run typegen              # Generate TypeScript types from Sanity schemas
 ## 🎨 Design System
 
 **Brand Colors:**
+
 - LTL Deep Blue: `#0057B8`
-- Hopeful Yellow: `#FFC72C` 
+- Hopeful Yellow: `#FFC72C`
 - Light Slate: `#F0F4F8`
 - Charcoal: `#1D2939`
 
 **Typography:**
+
 - Headings: Poppins
 - Body: Noto Sans
 
