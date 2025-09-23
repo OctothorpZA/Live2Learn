@@ -4,11 +4,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**LTL (Learn to Lead) Marketing Site** - A Next.js 15 marketing website for an educational non-profit organization with full Sanity CMS integration. Built as a monorepo with two workspaces:
+**Living Through Learning (LTL) Marketing Site** - A Next.js 15 marketing website for a South African educational non-profit organization with full Sanity CMS integration. Built as a monorepo with two workspaces:
 - `frontend/` - Next.js 15 application with App Router
 - `studio/` - Sanity Studio for content management
 
-This is a comprehensive marketing site featuring e-commerce, interactive mapping, contact management, and a complete CMS-driven page builder system for an educational organization focused on school partnerships and programs.
+This is a comprehensive marketing site featuring e-commerce, interactive mapping, contact management, and a complete CMS-driven page builder system for Living Through Learning, a Cape Town-based NPO dedicated to foundation phase literacy education.
+
+### About Living Through Learning
+- **Founded**: 1990 (formalized as LTL in 2012) by Sonja Botha
+- **Mission**: Provide training and interventions supporting educators and learners in South Africa, focusing on foundation phase literacy (ages 4-7)
+- **Vision**: "Every child is a national asset and every child must be able to read with meaning"
+- **Location**: 134 Main Rd, Diep River, Cape Town, 7800, South Africa
+- **Methodology**: Gattegno's "Words in Colour" phonics-based approach
+- **Impact**: 35+ years experience, curriculum used by 30,000+ learners, achieving up to 80% literacy rate improvements
+
+### Key Programs
+- **Coronation Reading Adventure Room (CRAR)**: Step-by-step English literacy curriculum in 17 schools, impacting 3,000+ learners and 105 educators annually
+- **Educators Forum**: Validation and training to address common teaching challenges
+- **ACSA Literacy Action Rooms**: Specialized learning environments in disadvantaged schools
+- **Teachers in Training**: Professional development on discipline, behavioral management, and classroom strategies
 
 ## Project Status & Sprint Progression
 
@@ -50,6 +64,22 @@ The project has successfully completed 15 sprints following a structured develop
 - **Resolution**: Requires PayFast developer support engagement
 - **Location**: `/frontend/app/lib/payfast.ts` and `/frontend/app/actions.ts`
 
+### Recent Build Fixes (September 2024)
+
+**Vercel Deployment Build Failures Resolved**:
+- **Status**: ✅ **RESOLVED** - All build errors fixed, deployment successful
+- **Issues Fixed**:
+  - **ESLint Errors**: 
+    - Fixed unescaped apostrophes (`'` → `&apos;`) in HybridHomePage.tsx, ModernHomePage.tsx, HeroSection.tsx, SolutionSection.tsx
+    - Replaced HTML `<a>` tags with Next.js `<Link>` components in contact/page.tsx and ImpactPageClient.tsx
+  - **TypeScript Errors**:
+    - Fixed hero section type errors with proper type assertions in home page components
+    - Resolved Footer.tsx social media links filter method error with type casting
+    - Fixed ImpactMap.tsx Leaflet integration errors (removed invalid `zoomControlOptions`, fixed `whenReady` callback)
+    - Resolved SocialMediaIcon.tsx JSX namespace error with React import
+- **Build Status**: ✅ Successfully compiles with 0 errors, all 19 static pages generated
+- **Type Check**: ✅ All TypeScript errors resolved across frontend and studio workspaces
+
 ## Development Commands
 
 Run all commands from the project root unless specified otherwise:
@@ -85,6 +115,20 @@ npm run extract-types      # Extract schema types (runs before build)
 ```bash
 npm run import-sample-data  # Import sample dataset into Sanity
 ```
+
+## Strategic Architecture
+
+### Development Methodology
+- **Approach**: "Content-first, platform-second" strategy prioritizing editorial workflow and user experience
+- **Architecture**: Headless/decoupled CMS architecture for performance, security, and editorial flexibility
+- **Framework**: Component-based design system enabling rapid iteration and consistent user experience
+- **Analytics**: KPI-driven development with focus on user engagement, conversion rates, and educational impact metrics
+
+### Target Audiences & User Personas
+- **Primary**: School Principals and Educators (foundation phase literacy professionals)
+- **Secondary**: Parents and Guardians (seeking literacy support for children ages 4-7)
+- **Tertiary**: Education Researchers and Policymakers (literacy methodology advocates)
+- **Quaternary**: Donors and Volunteers (supporters of educational NPOs)
 
 ## Architecture
 
@@ -221,6 +265,25 @@ PAYFAST_MERCHANT_KEY=your-merchant-key
 PAYFAST_PASSPHRASE=your-passphrase
 ```
 
+### KPI Framework & Analytics
+**Primary KPIs:**
+- **User Engagement**: Page views, session duration, bounce rate by audience segment
+- **Conversion Metrics**: Contact form submissions, newsletter sign-ups, donation clicks
+- **E-commerce Performance**: Product page views, cart additions, checkout completions
+- **Educational Impact**: Program inquiries, educator training requests, resource downloads
+
+**Secondary KPIs:**
+- **Content Performance**: Blog engagement, social media shares, video completion rates
+- **Technical Metrics**: Page load speeds, mobile usability scores, accessibility compliance
+- **Acquisition Channels**: Organic search, referral traffic, direct visits by user type
+
+### Content Strategy Pillars
+1. **Educational Authority**: Showcase 35+ years expertise and proven methodologies
+2. **Impact Demonstration**: Highlight quantifiable outcomes and success stories
+3. **Accessibility Focus**: Ensure content serves diverse literacy levels and technical capabilities
+4. **Community Building**: Foster connections between educators, parents, and supporters
+5. **Resource Provision**: Offer practical tools and materials for immediate implementation
+
 ### Development Notes
 - **Ports**: Frontend (3000), Studio (3333)
 - **TypeScript**: Strict configuration with auto-generated Sanity types
@@ -229,3 +292,5 @@ PAYFAST_PASSPHRASE=your-passphrase
 - **State Persistence**: Cart data persists in localStorage via Zustand
 - **Client-Side Features**: Maps and cart require client components due to browser APIs
 - **Visual Editing**: Full integration with Sanity's Presentation Tool for live editing
+- **Methodology**: Implements Gattegno's "Words in Colour" phonics principles in digital interface design
+- **Localization**: Optimized for South African context (ZAR currency, local payment methods, geographic references)

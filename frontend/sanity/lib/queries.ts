@@ -164,11 +164,16 @@ export const allProgramsQuery = groq`
   }
 `
 export const allTeamMembersQuery = groq`
-  *[_type == "person"] | order(name asc) {
+  *[_type == "person"] | order(displayOrder asc, name asc) {
     _id,
     name,
     role,
-    "image": image.asset->url
+    specialty,
+    yearsWithLTL,
+    bio,
+    displayOrder,
+    "image": image.asset->url,
+    "slug": slug.current
   }
 `
 
@@ -198,6 +203,16 @@ export const allSchoolPartnersQuery = groq`
     _id,
     schoolName,
     status,
+    latitude,
+    longitude
+  }
+`
+
+export const headOfficeLocationQuery = groq`
+  *[_type == "schoolPartner" && status == "Head Office"][0] {
+    _id,
+    schoolName,
+    address,
     latitude,
     longitude
   }

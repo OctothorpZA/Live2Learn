@@ -10,12 +10,21 @@
 @theme {
   --shadow-layer: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
 
+  /* LTL Custom Colors */
+  --color-ltl-deep-blue: #0057B8;
+  --color-light-slate: #F0F4F8;
+  --color-hopeful-yellow: #FFC72C;
+  --color-charcoal: #1D2939;
+
+  /* Base Colors */
   --color-framework: #000;
   --color-black: #0b0b0b;
   --color-white: #fff;
   --color-brand: #f50;
   --color-blue: #0052ff;
   --color-yellow: #cdea19;
+  
+  /* Gray Scale */
   --color-gray-50: #f6f6f8;
   --color-gray-100: #eeeef1;
   --color-gray-200: #e3e4e8;
@@ -28,8 +37,33 @@
   --color-gray-900: #1b1d27;
   --color-gray-950: #13141b;
 
-  --font-display: 'Inter', 'sans-serif';
-  --font-sans: 'Inter', 'sans-serif';
+  /* Extended Color Palette */
+  --color-red-50: #fff6f5;
+  --color-red-100: #ffe7e5;
+  --color-red-200: #ffdedc;
+  --color-red-600: #cc2819;
+  
+  --color-green-50: #e7f9ed;
+  --color-green-100: #d0f4dc;
+  --color-green-600: #329454;
+  
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-600: #2563eb;
+  
+  --color-purple-50: #faf5ff;
+  --color-purple-100: #f3e8ff;
+  --color-purple-600: #9333ea;
+  
+  --color-orange-50: #fcf1e8;
+  --color-orange-100: #f9e3d2;
+  --color-orange-600: #ba5f1e;
+
+  /* LTL Font Families */
+  --font-heading: 'Poppins', 'sans-serif';
+  --font-body: 'Noto Sans', 'sans-serif';
+  --font-display: 'Poppins', 'sans-serif';
+  --font-sans: 'Noto Sans', 'sans-serif';
 
   --default-transition-duration: 250ms;
 }

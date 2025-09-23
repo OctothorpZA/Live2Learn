@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { sendContactEmail } from '@/app/actions'
+import { client } from '@/sanity/lib/client'
+import { headOfficeLocationQuery } from '@/sanity/lib/queries'
 
 // Custom SVG Icons
 const MapPinIcon = ({ className }: { className?: string }) => (
@@ -54,7 +56,8 @@ const CheckCircleIcon = ({ className }: { className?: string }) => (
   </svg>
 )
 
-export default function ContactPage() {
+// Client Component for the form functionality
+function ContactForm({ headOfficeData }: { headOfficeData: any }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -165,27 +168,8 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Contact Cards Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {contactInfo.map((info, index) => (
-              <div
-                key={info.title}
-                className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className={`w-12 h-12 ${info.bgColor} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <info.icon className={`w-6 h-6 ${info.color}`} />
-                </div>
-                <h3 className="font-bold font-heading text-charcoal mb-2">{info.title}</h3>
-                <p className="text-charcoal font-medium mb-1">{info.detail}</p>
-                <p className="text-charcoal/60 text-sm">{info.subDetail}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Spacer */}
+      <section className="py-8"></section>
 
       {/* Main Contact Form Section */}
       <section className="py-16">
@@ -193,7 +177,7 @@ export default function ContactPage() {
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
               <div className="grid grid-cols-1 lg:grid-cols-2">
-                {/* Left Side - Decorative */}
+                {/* Left Side - Contact Information */}
                 <div className="bg-gradient-to-br from-ltl-deep-blue to-ltl-deep-blue/80 p-8 lg:p-12 text-white relative overflow-hidden">
                   {/* Background Pattern */}
                   <div className="absolute inset-0 opacity-10">
@@ -203,26 +187,92 @@ export default function ContactPage() {
                   </div>
                   
                   <div className="relative">
-                    <h2 className="text-3xl lg:text-4xl font-bold font-heading mb-6">
-                      Let&apos;s Build Something Amazing Together
+                    <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-8">
+                      Get in Touch
                     </h2>
-                    <p className="text-white/90 text-lg mb-8 leading-relaxed">
-                      Whether you&apos;re a school looking for partnership, a volunteer ready to make a difference, or someone with innovative ideas for literacy development, we want to connect with you.
-                    </p>
                     
-                    {/* Features List */}
-                    <div className="space-y-4">
-                      {[
-                        'Quick response within 24 hours',
-                        'Personalized consultation available',
-                        'Multiple ways to get involved',
-                        'Expert guidance and support'
-                      ].map((feature, index) => (
-                        <div key={index} className="flex items-center space-x-3">
-                          <CheckCircleIcon className="w-5 h-5 text-hopeful-yellow flex-shrink-0" />
-                          <span className="text-white/90">{feature}</span>
+                    {/* Contact Info Cards - 2x3 Grid */}
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Visit Our Office */}
+                      <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-colors">
+                        <div className="text-center">
+                          <div className="bg-white/20 rounded-lg p-3 w-fit mx-auto mb-3">
+                            <MapPinIcon className="w-6 h-6 text-hopeful-yellow" />
+                          </div>
+                          <h3 className="font-bold text-white text-sm mb-2">Visit Our Office</h3>
+                          <p className="text-white/90 text-xs leading-relaxed">
+                            {headOfficeData?.address || '134 Main Rd, Diep River, Cape Town, 7800'}
+                          </p>
                         </div>
-                      ))}
+                      </div>
+
+                      {/* Call Us */}
+                      <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-colors">
+                        <div className="text-center">
+                          <div className="bg-white/20 rounded-lg p-3 w-fit mx-auto mb-3">
+                            <PhoneIcon className="w-6 h-6 text-hopeful-yellow" />
+                          </div>
+                          <h3 className="font-bold text-white text-sm mb-2">Call Us</h3>
+                          <p className="text-white/90 text-xs leading-relaxed">
+                            +27 21 123 4567<br />
+                            Mon-Fri<br />
+                            9AM-5PM SAST
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Email Us */}
+                      <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-colors">
+                        <div className="text-center">
+                          <div className="bg-white/20 rounded-lg p-3 w-fit mx-auto mb-3">
+                            <EnvelopeIcon className="w-6 h-6 text-hopeful-yellow" />
+                          </div>
+                          <h3 className="font-bold text-white text-sm mb-2">Email Us</h3>
+                          <p className="text-white/90 text-xs leading-relaxed">
+                            info@livingthroughlearning.org<br />
+                            Response within<br />
+                            24 hours
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Office Hours */}
+                      <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-colors">
+                        <div className="text-center">
+                          <div className="bg-white/20 rounded-lg p-3 w-fit mx-auto mb-3">
+                            <ClockIcon className="w-6 h-6 text-hopeful-yellow" />
+                          </div>
+                          <h3 className="font-bold text-white text-sm mb-2">Office Hours</h3>
+                          <p className="text-white/90 text-xs leading-relaxed">
+                            Monday - Friday<br />
+                            9:00 AM<br />
+                            5:00 PM SAST
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Map Location - Spanning 2 columns */}
+                      <div className="col-span-2 bg-white/10 rounded-lg p-3 hover:bg-white/20 transition-colors">
+                        <div className="bg-white/20 rounded-lg overflow-hidden h-32 relative">
+                          <iframe
+                            src={headOfficeData?.latitude && headOfficeData?.longitude 
+                              ? `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1000!2d${headOfficeData.longitude}!3d${headOfficeData.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus`
+                              : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3308.8743834567!2d18.48633531589!3d-34.04087858060!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1dcc5d5aa1e5e9a7%3A0x1e5e5e5e5e5e5e5e!2s134%20Main%20Rd%2C%20Diep%20River%2C%20Cape%20Town%2C%207800%2C%20South%20Africa!5e0!3m2!1sen!2sus!4v1695456789012!5m2!1sen!2sus"
+                            }
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            allowFullScreen={true}
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            className="rounded-lg"
+                          ></iframe>
+                          {/* Map overlay with address */}
+                          <div className="absolute bottom-2 left-2 bg-ltl-deep-blue/90 text-white px-2 py-1 rounded text-xs font-medium">
+                            {headOfficeData?.address || '134 Main Rd, Diep River'}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -426,4 +476,11 @@ export default function ContactPage() {
       `}</style>
     </div>
   )
+}
+
+// Server Component to fetch data and render the client component
+export default async function ContactPage() {
+  const headOfficeData = await client.fetch(headOfficeLocationQuery)
+  
+  return <ContactForm headOfficeData={headOfficeData} />
 }

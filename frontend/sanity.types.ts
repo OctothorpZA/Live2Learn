@@ -842,12 +842,17 @@ export type ProgramSlugsQueryResult = Array<never>
 // Query: *[_type == "program" && defined(slug.current)] | order(_createdAt desc) {    _id,    programName,    "slug": slug.current,    "coverImage": coverImage.asset->url,    "excerpt": array::join(string::split((pt::text(description[0...1])), "")[0...150], "") + "..."  }
 export type AllProgramsQueryResult = Array<never>
 // Variable: allTeamMembersQuery
-// Query: *[_type == "person"] | order(name asc) {    _id,    name,    role,    "image": image.asset->url  }
+// Query: *[_type == "person"] | order(displayOrder asc, name asc) {    _id,    name,    role,    specialty,    yearsWithLTL,    bio,    displayOrder,    "image": image.asset->url,    "slug": slug.current  }
 export type AllTeamMembersQueryResult = Array<{
   _id: string
   name: null
   role: null
+  specialty: null
+  yearsWithLTL: null
+  bio: null
+  displayOrder: null
   image: null
+  slug: null
 }>
 // Variable: allProductsQuery
 // Query: *[_type == "product"] {    _id,    productName,    "slug": slug.current,    "image": image.asset->url,    price,  }
@@ -875,7 +880,7 @@ declare module '@sanity/client' {
     '\n  *[_type == "program" && slug.current == $slug][0] {\n    _id,\n    programName,\n    "slug": slug.current,\n    "coverImage": coverImage.asset->url,\n    description,\n    status,\n    targetAudience,\n    keyMetrics[]{\n      _key,\n      value,\n      label\n    },\n  }\n': ProgramPageQueryResult
     '\n*[_type == "program" && defined(slug.current)][].slug.current\n': ProgramSlugsQueryResult
     '\n  *[_type == "program" && defined(slug.current)] | order(_createdAt desc) {\n    _id,\n    programName,\n    "slug": slug.current,\n    "coverImage": coverImage.asset->url,\n    "excerpt": array::join(string::split((pt::text(description[0...1])), "")[0...150], "") + "..."\n  }\n': AllProgramsQueryResult
-    '\n  *[_type == "person"] | order(name asc) {\n    _id,\n    name,\n    role,\n    "image": image.asset->url\n  }\n': AllTeamMembersQueryResult
+    '\n  *[_type == "person"] | order(displayOrder asc, name asc) {\n    _id,\n    name,\n    role,\n    specialty,\n    yearsWithLTL,\n    bio,\n    displayOrder,\n    "image": image.asset->url,\n    "slug": slug.current\n  }\n': AllTeamMembersQueryResult
     '\n  *[_type == "product"] {\n    _id,\n    productName,\n    "slug": slug.current,\n    "image": image.asset->url,\n    price,\n  }\n': AllProductsQueryResult
     '\n  *[_type == "product" && slug.current == $slug][0] {\n    _id,\n    productName,\n    "slug": slug.current,\n    "image": image.asset->url,\n    price,\n    description,\n  }\n': SingleProductQueryResult
     '\n  *[_type == "schoolPartner" && defined(latitude) && defined(longitude)] {\n    _id,\n    schoolName,\n    status,\n    latitude,\n    longitude\n  }\n': AllSchoolPartnersQueryResult

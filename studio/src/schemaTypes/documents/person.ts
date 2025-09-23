@@ -32,9 +32,36 @@ export const person = defineType({
     // **Crucial Fix**: Renamed 'title' to 'role' to match frontend components
     defineField({
       name: 'role',
-      title: 'Role',
-      description: 'e.g., Executive Director, Facilitator, Board Member',
+      title: 'Role/Position',
+      description: 'e.g., Executive Director, Literacy Facilitator, Board Member, Program Coordinator',
       type: 'string',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'bio',
+      title: 'Biography',
+      description: 'Brief bio highlighting expertise in literacy education, experience with LTL, or educational background',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'yearsWithLTL',
+      title: 'Years with LTL',
+      description: 'How many years this person has been with Living Through Learning',
+      type: 'number',
+      validation: (rule) => rule.min(0).max(50),
+    }),
+    defineField({
+      name: 'specialty',
+      title: 'Area of Specialty',
+      description: 'e.g., Foundation Phase Literacy, Teacher Training, Reading Intervention, Gattegno Method',
+      type: 'string',
+    }),
+    defineField({
+      name: 'displayOrder',
+      title: 'Display Order',
+      description: 'Order in which team members should appear (lower numbers first)',
+      type: 'number',
+      initialValue: 999,
     }),
     // **Crucial Fix**: Renamed 'picture' to 'image' to match frontend components
     defineField({

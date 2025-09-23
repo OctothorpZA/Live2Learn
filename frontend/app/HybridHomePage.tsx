@@ -100,35 +100,35 @@ export default function HybridHomePage({ pageData }: HybridHomePageProps) {
   // Extract hero data from pageBuilder if available
   const heroSection = pageData?.pageBuilder?.find((section: any) => section._type === 'hero') as any
   
-  // Impact metrics - can be overridden by page builder impact sections
+  // Impact metrics - Real LTL achievements
   const impactMetrics = [
     {
-      icon: BookOpenIcon,
-      value: 15000,
-      suffix: "+",
-      label: "Books Distributed",
-      description: "Physical and digital resources reaching communities"
-    },
-    {
       icon: UsersIcon,
-      value: 2450,
+      value: 150000,
       suffix: "+",
-      label: "Students Reached", 
-      description: "Young learners actively participating in our programs"
+      label: "Learners Trained",
+      description: "Students who have participated in our literacy programs"
     },
     {
       icon: AcademicCapIcon,
-      value: 45,
+      value: 700,
       suffix: "+",
-      label: "Partner Schools",
-      description: "Educational institutions in our growing network"
+      label: "Educators Trained", 
+      description: "Teachers equipped with our proven methodology"
+    },
+    {
+      icon: BookOpenIcon,
+      value: 30000,
+      suffix: "+",
+      label: "Using Our Curriculum",
+      description: "Children actively learning with our Foundation Phase program"
     },
     {
       icon: StarIcon,
-      value: 89,
+      value: 80,
       suffix: "%",
-      label: "Success Rate",
-      description: "Students showing measurable literacy improvement"
+      label: "Literacy Improvement",
+      description: "Average increase in literacy scores achieved"
     }
   ]
 
@@ -159,7 +159,7 @@ export default function HybridHomePage({ pageData }: HybridHomePageProps) {
             {/* Animated Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md rounded-full px-4 py-2 mb-8 animate-fade-in-up border border-white/30">
               <span className="w-2 h-2 bg-hopeful-yellow rounded-full animate-pulse"></span>
-              <span className="text-sm font-medium text-white">Transforming Lives Through Literacy</span>
+              <span className="text-sm font-medium text-white">Awakening Africa through Early Literacy</span>
             </div>
 
             {/* Main Headline */}
@@ -174,10 +174,10 @@ export default function HybridHomePage({ pageData }: HybridHomePageProps) {
                 </>
               ) : (
                 <>
-                  Unlocking Every Child&apos;s
+                  Every Child is a 
                   <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-hopeful-yellow via-yellow-300 to-orange-400 drop-shadow-sm">
-                    Learning Potential
+                    National Asset
                   </span>
                 </>
               )}
@@ -185,7 +185,7 @@ export default function HybridHomePage({ pageData }: HybridHomePageProps) {
 
             {/* Sub-headline */}
             <p className="text-xl md:text-2xl text-white/95 max-w-4xl mx-auto mb-10 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-              {heroSection?.subheading || 'We partner with schools across South Africa to provide innovative literacy programs that transform communities, one reader at a time.'}
+              {heroSection?.subheading || 'Since 2010, we have transformed foundation phase literacy education across South Africa, empowering over 150,000 learners and 700+ educators with our proven Gattegno methodology.'}
             </p>
 
             {/* CTA Buttons */}
@@ -282,6 +282,67 @@ export default function HybridHomePage({ pageData }: HybridHomePageProps) {
         <PageBuilder page={pageData} />
       )}
 
+      {/* Our Programs Section */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-5xl font-bold font-heading text-charcoal mb-6">
+                Our Proven Programs
+              </h2>
+              <p className="text-xl text-charcoal/70 max-w-3xl mx-auto">
+                Transforming literacy education through innovative Reading Adventure Rooms, 
+                comprehensive teacher training, and the proven Gattegno methodology.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-gradient-to-br from-ltl-deep-blue/5 to-ltl-deep-blue/10 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="w-16 h-16 bg-ltl-deep-blue rounded-2xl flex items-center justify-center mb-6">
+                  <BookOpenIcon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-ltl-deep-blue mb-4">Reading Adventure Rooms</h3>
+                <p className="text-charcoal/70 leading-relaxed mb-6">
+                  Themed literacy classrooms in 30+ schools with step-by-step phonics curriculum, 
+                  benefiting 3,000+ learners and 105 educators annually.
+                </p>
+                <div className="text-sm text-ltl-deep-blue font-semibold">
+                  10-20% literacy improvement within one term
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-hopeful-yellow/20 to-hopeful-yellow/30 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="w-16 h-16 bg-hopeful-yellow rounded-2xl flex items-center justify-center mb-6">
+                  <UsersIcon className="w-8 h-8 text-ltl-deep-blue" />
+                </div>
+                <h3 className="text-2xl font-bold text-ltl-deep-blue mb-4">Educator Training</h3>
+                <p className="text-charcoal/70 leading-relaxed mb-6">
+                  Professional development workshops covering classroom management, communication, 
+                  and the Gattegno &quot;Words in Colour&quot; methodology.
+                </p>
+                <div className="text-sm text-ltl-deep-blue font-semibold">
+                  700+ educators trained to date
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="w-16 h-16 bg-charcoal rounded-2xl flex items-center justify-center mb-6">
+                  <AcademicCapIcon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-ltl-deep-blue mb-4">Foundation Phase Curriculum</h3>
+                <p className="text-charcoal/70 leading-relaxed mb-6">
+                  Comprehensive literacy curriculum used by 30,000+ children, 
+                  achieving up to 80% increase in average literacy scores.
+                </p>
+                <div className="text-sm text-ltl-deep-blue font-semibold">
+                  35+ years of proven methodology
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Mission Statement Section - Always shown */}
       <section className="py-16 md:py-24 bg-gradient-to-r from-ltl-deep-blue to-ltl-deep-blue/90 text-white relative overflow-hidden">
         {/* Background Pattern */}
@@ -297,14 +358,15 @@ export default function HybridHomePage({ pageData }: HybridHomePageProps) {
               Every Child Deserves the Gift of Reading
             </h2>
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-              We believe that literacy is the foundation of opportunity. Through innovative programs, dedicated partnerships, and community-centered approaches, we&apos;re building a South Africa where every child can read, learn, and thrive.
+              Founded by Sonja Botha in 2010, Living Through Learning brings over 35 years of educational excellence 
+              to disadvantaged communities across South Africa. Our mission: ensuring every child can read with meaning.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               <Link
                 href="/about"
                 className="bg-hopeful-yellow text-ltl-deep-blue font-bold py-4 px-8 rounded-xl hover:bg-yellow-400 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
               >
-                Learn About Our Mission
+                Learn About Our Story
               </Link>
               <Link
                 href="/impact"
@@ -317,22 +379,82 @@ export default function HybridHomePage({ pageData }: HybridHomePageProps) {
         </div>
       </section>
 
+      {/* Success Stories Section */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-light-slate to-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-5xl font-bold font-heading text-charcoal mb-6">
+                Real Results, Real Impact
+              </h2>
+              <p className="text-xl text-charcoal/70 max-w-3xl mx-auto">
+                Hear from educators and see the measurable improvements in schools across South Africa.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="flex items-start space-x-4 mb-6">
+                  <div className="w-12 h-12 bg-ltl-deep-blue rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-white font-bold">LM</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-ltl-deep-blue">Mrs. L Mntujani</h4>
+                    <p className="text-charcoal/70 text-sm">Nooitgedacht Primary School</p>
+                  </div>
+                </div>
+                <blockquote className="text-charcoal/80 italic leading-relaxed">
+                  &quot;Our learners can now form letters correctly and are so much more prepared for grade 2. 
+                  Children who couldn&apos;t speak English can now name objects and participate actively in class.&quot;
+                </blockquote>
+              </div>
+              
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="flex items-start space-x-4 mb-6">
+                  <div className="w-12 h-12 bg-hopeful-yellow rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-ltl-deep-blue font-bold">MP</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-ltl-deep-blue">Mrs. Petersen</h4>
+                    <p className="text-charcoal/70 text-sm">Bontebok Primary School</p>
+                  </div>
+                </div>
+                <blockquote className="text-charcoal/80 italic leading-relaxed">
+                  &quot;Students are enthusiastic about English lessons now. They confidently participate 
+                  in English conversations, and the classroom resources make learning so engaging.&quot;
+                </blockquote>
+              </div>
+            </div>
+            
+            <div className="text-center mt-12">
+              <div className="bg-ltl-deep-blue/5 rounded-2xl p-8 max-w-2xl mx-auto">
+                <h3 className="text-2xl font-bold text-ltl-deep-blue mb-4">Proven Results</h3>
+                <p className="text-lg text-charcoal/80">
+                  In 2015, CAPS results in CRAR schools increased by <strong>9%</strong> from 1st to 2nd term, 
+                  with an overall average increase of <strong>18%</strong> from baseline assessments.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Get Involved CTA Section - Always shown */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-hopeful-yellow/10 to-hopeful-yellow/5 relative overflow-hidden">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-bold font-heading text-charcoal mb-6 animate-fade-in-up">
-              Ready to Make a Difference?
+              Join Our Mission
             </h2>
             <p className="text-lg md:text-xl text-charcoal/70 mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-              Join our community of educators, volunteers, and partners working together to transform lives through literacy.
+              Partner with us to transform foundation phase literacy education across South Africa.
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               {[
-                { title: "Volunteer", desc: "Share your time and skills", href: "/get-involved" },
-                { title: "Partner", desc: "Collaborate with us", href: "/contact" },
-                { title: "Donate", desc: "Support our programs", href: "/shop" }
+                { title: "Partner Schools", desc: "Implement Reading Adventure Rooms", href: "/contact" },
+                { title: "Support Educators", desc: "Fund teacher training programs", href: "/contact" },
+                { title: "Shop Materials", desc: "Purchase our proven curriculum", href: "/shop" }
               ].map((item, index) => (
                 <Link
                   key={item.title}
